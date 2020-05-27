@@ -1,0 +1,82 @@
+T3F_PLATFORM_NAME = android
+T3F_PLATFORM_OBJECTS = $(ANDROID_PLATFORM_OBJECTS)
+T3F_PLATFORM_LIBS =\
+	-lallegro\
+	-lallegro_audio\
+	-lallegro_image\
+	-lallegro_acodec\
+	-lallegro_font\
+	-lallegro_ttf\
+	-lallegro_primitives\
+	-lallegro_memfile\
+	-lallegro_physfs
+#DEL_COMMAND = rm -f
+#DEL_FOLDER_COMMAND = rm -rf
+
+include makefile.common
+
+prepare_platform:
+	@echo Ready to build...
+
+#generate Android package
+android_package: clean_packages build_android $(ANDROID_PLATFORM_TARGET) android_sign
+	@echo Built and signed Android package!
+
+android_package_unsigned: clean_packages build_android $(ANDROID_PLATFORM_TARGET)
+	@echo Built and signed Android package!
+
+android_sign: ../packages/$(APP_PACKAGE_NAME)-android-unsigned.apk
+	@sign ../packages/$(APP_PACKAGE_NAME)-android-unsigned.apk ../packages/$(APP_PACKAGE_NAME)-android.apk
+	@rm ../packages/$(APP_PACKAGE_NAME)-android-unsigned.apk
+
+../android_temp:
+	@echo Copying template to temporary folder...
+	cp -a -R -L ../android ../android_temp
+
+edit_project:
+	@echo Editing project data to match our project definitions...
+	sed -i '' "s|org.liballeg.app|$(APP_ANDROID_PACKAGE)|" ../android_temp/app.project/app/src/main/AndroidManifest.xml
+	sed -i '' "s|APP_ORIENTATION|$(APP_ORIENTATION)|" ../android_temp/app.project/app/src/main/AndroidManifest.xml
+	sed -i '' "s|AllegroActivity|$(APP_TITLE)|" ../android_temp/app.project/app/src/main/res/values/strings.xml
+	sed -i '' "s|APP_PACKAGE|$(APP_ANDROID_PACKAGE)|" ../android_temp/app.project/app/build.gradle
+	sed -i '' "s|APP_VERSION|$(APP_VERSION)|" ../android_temp/app.project/app/build.gradle
+	sed -i '' "s|APP_RELEASE|$(APP_RELEASE)|" ../android_temp/app.project/app/build.gradle
+	sed -i '' "s|org.liballeg.app|$(APP_ANDROID_PACKAGE)|" ../android_temp/app.project/app/src/main/java/org/liballeg/app/MainActivity.java
+	sed -i '' "s|org.liballeg.app|$(APP_ANDROID_PACKAGE)|" ../android_temp/app.project/app/src/main/java/org/liballeg/app/EditBoxActivity.java
+
+copy_resources:
+	@echo Copying data to Android project...
+	cp -a ../bin/data ../android_temp/app.project/app/src/main/assets
+	mkdir -p ../android_temp/app.project/app/src/main/res/drawable
+	cp ../icons/48.png ../android_temp/app.project/app/src/main/res/drawable/icon.png
+	mkdir -p ../android_temp/app.project/app/src/main/res/drawable-hdpi
+	cp ../icons/72.png ../android_temp/app.project/app/src/main/res/drawable-hdpi/icon.png
+	mkdir -p ../android_temp/app.project/app/src/main/res/drawable-ldpi
+	cp ../icons/36.png ../android_temp/app.project/app/src/main/res/drawable-ldpi/icon.png
+	mkdir -p ../android_temp/app.project/app/src/main/res/drawable-mdpi
+	cp ../icons/48.png ../android_temp/app.project/app/src/main/res/drawable-mdpi/icon.png
+	mkdir -p ../android_temp/app.project/app/src/main/res/drawable-xhdpi
+	cp ../icons/96.png ../android_temp/app.project/app/src/main/res/drawable-xhdpi/icon.png
+
+copy_libs:
+	make -f ../scripts/makefile.android_helper -I ../scripts ANDROID_ARCHITECTURE=armeabi-v7a copy_libs
+#	make -f ../scripts/makefile.android_helper -I ../scripts ANDROID_ARCHITECTURE=arm64-v8a copy_libs
+
+create_native_libs:
+	make -f ../scripts/makefile.android_helper -I ../scripts ANDROID_ARCHITECTURE=armeabi-v7a ANDROID_C_ARCH="-march=armv7-a" ANDROID_HOST=arm-linux-androideabi CFLAGS_ARCH="-mfpu=vfpv3-d16 -mfloat-abi=softfp" LFLAGS_ARCH=-"Wl,--fix-cortex-a8" create_native_lib
+#	make clean
+#	make -f makefile.android_helper ANDROID_ARCHITECTURE=arm64-v8a ANDROID_C_ARCH="" ANDROID_HOST=aarch64-linux-android CFLAGS_ARCH="" LFLAGS_ARCH="" create_native_lib
+
+#sed info: sed -i requires backup extension argument on OS X, should work fine this
+#          way on other Unix platforms, we should do "sed -i '' -original-new- filename"
+build_android: ../android_temp edit_project copy_resources copy_libs create_native_libs
+	@echo Building Android project
+	cd ../android_temp/app.project; ./gradlew build
+	cp ../android_temp/app.project/app/build/outputs/apk/release/app-release-unsigned.apk ../packages/$(APP_PACKAGE_NAME)-android-unsigned.apk
+	rm -rf ../android_temp
+
+build_temp:
+	mkdir -p ../android_temp
+
+clean_packages:
+	rm -rf ../packages/$(APP_PACKAGE_NAME)-$(ANDROID_ARCHITECTURE)-unsigned.apk ../packages/$(APP_PACKAGE_NAME)-$(ANDROID_ARCHITECTURE).apk
