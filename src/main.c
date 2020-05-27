@@ -1,18 +1,13 @@
 #include "t3f/t3f.h"
 #include "t3gui/t3gui.h"
 #include "t3gui/theme.h"
+#include "ui.h"
 
 /* structure to hold all of our app-specific data */
 typedef struct
 {
 
-	/* GUI data */
-	T3GUI_THEME * box_theme;
-	T3GUI_THEME * button_theme;
-	T3GUI_THEME * list_box_theme;
-	T3GUI_THEME * slider_theme;
-	T3GUI_DIALOG * dialog;
-
+	XLM_UI * ui;
 	char launcher_folder[1024];
 
 } APP_INSTANCE;

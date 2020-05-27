@@ -25,6 +25,7 @@ APP_OBJECTS = t3gui/dialog.o\
               t3gui/t3gui.o\
               t3gui/theme.o\
               t3gui/unicode.o\
+              ui.o\
               main.o
 APP_PACKAGE_DIR = ../packages
 #APP_LIBS =
