@@ -1,14 +1,15 @@
 #include "t3f/t3f.h"
 #include "t3gui/t3gui.h"
 #include "t3gui/theme.h"
+#include "launcher_database.h"
 #include "ui.h"
 
 /* structure to hold all of our app-specific data */
 typedef struct
 {
 
+	XLM_LAUNCHER_DATABASE * launcher_database;
 	XLM_UI * ui;
-	char launcher_folder[1024];
 
 } APP_INSTANCE;
 
@@ -29,9 +30,6 @@ void app_render(void * data)
 /* initialize our app, load graphics, etc. */
 bool app_initialize(APP_INSTANCE * app, int argc, char * argv[])
 {
-
-	const char * home_path;
-
 	/* initialize T3F */
 	if(!t3f_initialize(T3F_APP_TITLE, 640, 480, 60.0, app_logic, app_render, T3F_DEFAULT, app))
 	{
@@ -43,13 +41,6 @@ bool app_initialize(APP_INSTANCE * app, int argc, char * argv[])
 		printf("Error initializing T3GUI\n");
 		return false;
 	}
-	home_path = getenv("HOME");
-	if(!home_path)
-	{
-		printf("Unable to determine home directory.\n");
-		return false;
-	}
-	sprintf(app->launcher_folder, "%s/.local/share/applications/", home_path);
 
 	return true;
 }
