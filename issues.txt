@@ -1,0 +1,28 @@
+XDG Launcher Manager Issues
+---------------------------
+
+[ ]Build launcher database from .desktop files in the applications folder.
+
+[ ]Implement UI.
+
+   [ ]Need a list box to list all of the launchers in the database.
+
+	 [ ]Need edit boxes for each field in the launcher.
+
+   [ ]Need an image button to show the current icon. This button should be
+      clickable so we can select a new icon if we want.
+
+[ ]Implement persistence.
+
+   [ ]The name of the desktop file should be able to be changed when we change
+      the launcher's name. We will need to ensure we can't give two launchers
+      the same name. This check should be done before deleting the old launcher
+      file and saving the new one.
+
+   [ ]We want changes made to be saved automatically, much like the OS settings.
+
+   [ ]We need a method to store the selected icon so we don't rely on it being
+      kept in the location it was selected from. Maybe we can store it alongside
+      the .desktop file in the applications folder.
+
+   [ ]Make sure we can select SVG icons in addition to .PNG.
