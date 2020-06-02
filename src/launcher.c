@@ -37,6 +37,7 @@ void xlm_destroy_launcher(XLM_LAUNCHER * lp)
 XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 {
 	XLM_LAUNCHER * lp;
+	const char * val;
 
 	lp = xlm_create_launcher();
 	if(!lp)
@@ -44,6 +45,43 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 		goto fail;
 	}
 	memset(lp, 0, sizeof(XLM_LAUNCHER));
+
+	lp->ini = al_load_config_file(fn);
+	if(!lp->ini)
+	{
+		goto fail;
+	}
+	val = al_get_config_value(lp->ini, "Desktop Entry", "Name");
+	if(val)
+	{
+		strcpy(lp->name, val);
+	}
+	val = al_get_config_value(lp->ini, "Desktop Entry", "GenericName");
+	if(val)
+	{
+		strcpy(lp->type, val);
+	}
+	val = al_get_config_value(lp->ini, "Desktop Entry", "Comment");
+	if(val)
+	{
+		strcpy(lp->comment, val);
+	}
+	val = al_get_config_value(lp->ini, "Desktop Entry", "Exec");
+	if(val)
+	{
+		strcpy(lp->command, val);
+	}
+	val = al_get_config_value(lp->ini, "Desktop Entry", "Path");
+	if(val)
+	{
+		strcpy(lp->working_directory, val);
+	}
+	val = al_get_config_value(lp->ini, "Desktop Entry", "Categories");
+	if(val)
+	{
+		strcpy(lp->categories, val);
+	}
+
 	return lp;
 
 	fail:

@@ -6,10 +6,13 @@
 typedef struct
 {
 
-  ALLEGRO_CONFIG * ini;
-  char name[1024];
-  char command[1024];
-  char working_directory[1024];
+	ALLEGRO_CONFIG * ini;
+	char name[1024];
+	char type[1024];
+	char comment[1024];
+	char command[1024];
+	char working_directory[1024];
+	char categories[1024];
   ALLEGRO_BITMAP * icon;
 
 } XLM_LAUNCHER;
