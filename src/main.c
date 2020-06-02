@@ -30,6 +30,8 @@ void app_render(void * data)
 /* initialize our app, load graphics, etc. */
 bool app_initialize(APP_INSTANCE * app, int argc, char * argv[])
 {
+	const char * home_path;
+
 	/* initialize T3F */
 	if(!t3f_initialize(T3F_APP_TITLE, 640, 480, 60.0, app_logic, app_render, T3F_DEFAULT, app))
 	{
@@ -41,6 +43,14 @@ bool app_initialize(APP_INSTANCE * app, int argc, char * argv[])
 		printf("Error initializing T3GUI\n");
 		return false;
 	}
+
+	home_path = getenv("HOME");
+	if(!home_path)
+	{
+		printf("Unable to determine home directory.\n");
+		return false;
+	}
+	app->launcher_database = xlm_create_launcher_database(home_path);
 
 	return true;
 }
