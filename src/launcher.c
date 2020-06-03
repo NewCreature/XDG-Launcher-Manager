@@ -94,6 +94,30 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 
 bool xlm_save_launcher(XLM_LAUNCHER * lp, const char * fn)
 {
+	if(strlen(lp->name))
+	{
+		al_set_config_value(lp->ini, "Desktop Entry", "Name", lp->name);
+	}
+	if(strlen(lp->type))
+	{
+		al_set_config_value(lp->ini, "Desktop Entry", "GenericName", lp->type);
+	}
+	if(strlen(lp->comment))
+	{
+		al_set_config_value(lp->ini, "Desktop Entry", "Comment", lp->comment);
+	}
+	if(strlen(lp->command))
+	{
+		al_set_config_value(lp->ini, "Desktop Entry", "Exec", lp->command);
+	}
+	if(strlen(lp->working_directory))
+	{
+		al_set_config_value(lp->ini, "Desktop Entry", "Path", lp->working_directory);
+	}
+	if(strlen(lp->categories))
+	{
+		al_set_config_value(lp->ini, "Desktop Entry", "Categories", lp->categories);
+	}
 	al_save_config_file(lp->path, lp->ini);
 	return false;
 }
