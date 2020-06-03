@@ -94,6 +94,7 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 
 bool xlm_save_launcher(XLM_LAUNCHER * lp, const char * fn)
 {
+	al_save_config_file(lp->path, lp->ini);
 	return false;
 }
 
