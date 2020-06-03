@@ -6,6 +6,9 @@
 typedef struct
 {
 
+	/* path to the launcher file */
+	char path[1024];
+
 	ALLEGRO_CONFIG * ini;
 	char name[1024];
 	char type[1024];

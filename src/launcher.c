@@ -46,7 +46,8 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 	}
 	memset(lp, 0, sizeof(XLM_LAUNCHER));
 
-	lp->ini = al_load_config_file(fn);
+	strcpy(lp->path, fn);
+	lp->ini = al_load_config_file(lp->path);
 	if(!lp->ini)
 	{
 		goto fail;
