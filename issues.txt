@@ -1,7 +1,7 @@
 XDG Launcher Manager Issues
 ---------------------------
 
-[ ]Build launcher database from .desktop files in the applications folder.
+[X]Build launcher database from .desktop files in the applications folder.
 
 [ ]Implement UI.
 
