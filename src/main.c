@@ -18,6 +18,7 @@ void app_logic(void * data)
 {
 	APP_INSTANCE * app = (APP_INSTANCE *)data;
 
+	xlm_process_ui(app->ui);
 }
 
 /* main rendering routine */
@@ -25,6 +26,7 @@ void app_render(void * data)
 {
 	APP_INSTANCE * app = (APP_INSTANCE *)data;
 
+	xlm_render_ui(app->ui);
 }
 
 /* initialize our app, load graphics, etc. */
@@ -51,6 +53,12 @@ bool app_initialize(APP_INSTANCE * app, int argc, char * argv[])
 		return false;
 	}
 	app->launcher_database = xlm_create_launcher_database(home_path);
+	if(!app->launcher_database)
+	{
+		printf("Unable to create launcher database!\n");
+		return false;
+	}
+	app->ui = xlm_create_ui(app->launcher_database);
 
 	return true;
 }
