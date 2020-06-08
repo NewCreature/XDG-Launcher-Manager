@@ -29,7 +29,9 @@ XLM_LAUNCHER * xlm_create_launcher(void)
 		{
 			goto fail;
 		}
+		memset(lp->field[i], 0, XLM_LAUNCHER_MAX_FIELD_SIZE);
 	}
+	return lp;
 
 	fail:
 	{
@@ -74,7 +76,6 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 	{
 		goto fail;
 	}
-	memset(lp, 0, sizeof(XLM_LAUNCHER));
 
 	strcpy(lp->path, fn);
 	lp->ini = al_load_config_file(lp->path);

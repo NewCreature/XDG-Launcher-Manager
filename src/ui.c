@@ -68,7 +68,17 @@ void xlm_render_ui(XLM_UI * uip)
 {
 	int pos_x = 0;
 	int pos_y = 0;
+	int i;
 
 	al_clear_to_color(t3f_color_black);
 	al_draw_textf(*uip->button_theme->state[0].font, t3f_color_white, pos_x, pos_y, 0, "Launcher %d/%d", uip->selected_launcher + 1, uip->launcher_database->launcher_count);
+	pos_y += al_get_font_line_height(*uip->button_theme->state[0].font) * 2;
+	if(uip->launcher_database->launcher_count > 0)
+	{
+		for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
+		{
+			al_draw_textf(*uip->button_theme->state[0].font, t3f_color_white, pos_x, pos_y, 0, "%d: %s", i + 1, uip->launcher_database->launcher[uip->selected_launcher]->field[i]);
+			pos_y += al_get_font_line_height(*uip->button_theme->state[0].font);
+		}
+	}
 }
