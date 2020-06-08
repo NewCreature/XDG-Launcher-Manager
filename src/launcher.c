@@ -1,8 +1,20 @@
 #include "launcher.h"
 
+static const char * xlm_launcher_key[XLM_LAUNCHER_MAX_FIELDS] =
+{
+	"Name",
+	"GenericName",
+	"Comment",
+	"Exec",
+	"Path",
+	"Categories",
+	NULL
+};
+
 XLM_LAUNCHER * xlm_create_launcher(void)
 {
 	XLM_LAUNCHER * lp;
+	int i;
 
 	lp = malloc(sizeof(XLM_LAUNCHER));
 	if(!lp)
@@ -10,6 +22,14 @@ XLM_LAUNCHER * xlm_create_launcher(void)
 		goto fail;
 	}
 	memset(lp, 0, sizeof(XLM_LAUNCHER));
+	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
+	{
+		lp->field[i] = malloc(XLM_LAUNCHER_MAX_FIELD_SIZE);
+		if(!lp->field[i])
+		{
+			goto fail;
+		}
+	}
 
 	fail:
 	{
@@ -20,11 +40,20 @@ XLM_LAUNCHER * xlm_create_launcher(void)
 
 void xlm_destroy_launcher(XLM_LAUNCHER * lp)
 {
+	int i;
+
 	if(lp)
 	{
 		if(lp->icon)
 		{
 			al_destroy_bitmap(lp->icon);
+		}
+		for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
+		{
+			if(lp->field[i])
+			{
+				free(lp->field[i]);
+			}
 		}
 		if(lp->ini)
 		{
@@ -38,6 +67,7 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 {
 	XLM_LAUNCHER * lp;
 	const char * val;
+	int i;
 
 	lp = xlm_create_launcher();
 	if(!lp)
@@ -52,35 +82,23 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 	{
 		goto fail;
 	}
-	val = al_get_config_value(lp->ini, "Desktop Entry", "Name");
-	if(val)
+	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
 	{
-		strcpy(lp->name, val);
-	}
-	val = al_get_config_value(lp->ini, "Desktop Entry", "GenericName");
-	if(val)
-	{
-		strcpy(lp->type, val);
-	}
-	val = al_get_config_value(lp->ini, "Desktop Entry", "Comment");
-	if(val)
-	{
-		strcpy(lp->comment, val);
-	}
-	val = al_get_config_value(lp->ini, "Desktop Entry", "Exec");
-	if(val)
-	{
-		strcpy(lp->command, val);
-	}
-	val = al_get_config_value(lp->ini, "Desktop Entry", "Path");
-	if(val)
-	{
-		strcpy(lp->working_directory, val);
-	}
-	val = al_get_config_value(lp->ini, "Desktop Entry", "Categories");
-	if(val)
-	{
-		strcpy(lp->categories, val);
+		if(xlm_launcher_key[i])
+		{
+			val = al_get_config_value(lp->ini, "Desktop Entry", xlm_launcher_key[i]);
+			if(val)
+			{
+				if(strlen(val) < XLM_LAUNCHER_MAX_FIELD_SIZE)
+				{
+					strcpy(lp->field[i], val);
+				}
+				else
+				{
+					goto fail;
+				}
+			}
+		}
 	}
 
 	return lp;
@@ -94,50 +112,27 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 
 bool xlm_save_launcher(XLM_LAUNCHER * lp, const char * fn)
 {
-	if(strlen(lp->name))
+	int i;
+
+	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
 	{
-		al_set_config_value(lp->ini, "Desktop Entry", "Name", lp->name);
-	}
-	if(strlen(lp->type))
-	{
-		al_set_config_value(lp->ini, "Desktop Entry", "GenericName", lp->type);
-	}
-	if(strlen(lp->comment))
-	{
-		al_set_config_value(lp->ini, "Desktop Entry", "Comment", lp->comment);
-	}
-	if(strlen(lp->command))
-	{
-		al_set_config_value(lp->ini, "Desktop Entry", "Exec", lp->command);
-	}
-	if(strlen(lp->working_directory))
-	{
-		al_set_config_value(lp->ini, "Desktop Entry", "Path", lp->working_directory);
-	}
-	if(strlen(lp->categories))
-	{
-		al_set_config_value(lp->ini, "Desktop Entry", "Categories", lp->categories);
+		if(lp->field[i] && xlm_launcher_key[i])
+		{
+			al_set_config_value(lp->ini, "Desktop Entry", xlm_launcher_key[i], lp->field[i]);
+		}
 	}
 	al_save_config_file(lp->path, lp->ini);
 	return false;
 }
 
-bool xlm_set_launcher_name(XLM_LAUNCHER * lp, const char * name)
+bool xlm_set_launcher_field(XLM_LAUNCHER * lp, int i, const char * val)
 {
-	strcpy(lp->name, name);
-	return true;
-}
-
-bool xlm_set_launcher_command(XLM_LAUNCHER * lp, const char * command)
-{
-	strcpy(lp->command, command);
-	return true;
-}
-
-bool xlm_set_launcher_working_directory(XLM_LAUNCHER * lp, const char * working_directory)
-{
-	strcpy(lp->working_directory, working_directory);
-	return true;
+	if(lp->field[i] && strlen(val) < XLM_LAUNCHER_MAX_FIELD_SIZE)
+	{
+		strcpy(lp->field[i], val);
+		return true;
+	}
+	return false;
 }
 
 bool xlm_set_launcher_icon(XLM_LAUNCHER * lp, ALLEGRO_BITMAP * icon)

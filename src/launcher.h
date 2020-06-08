@@ -3,6 +3,18 @@
 
 #include "t3f/t3f.h"
 
+#define XLM_LAUNCHER_MAX_FIELDS                16
+#define XLM_LAUNCHER_MAX_FIELD_SIZE          1024
+
+#define XLM_LAUNCHER_FIELD_NAME                 0
+#define XLM_LAUNCHER_FIELD_TYPE                 1
+#define XLM_LAUNCHER_FIELD_COMMENT              2
+#define XLM_LAUNCHER_FIELD_COMMAND              3
+#define XLM_LAUNCHER_FIELD_WORKING_DIRECTORY    4
+#define XLM_LAUNCHER_FIELD_CATEGORIES           5
+
+
+
 typedef struct
 {
 
@@ -10,12 +22,7 @@ typedef struct
 	char path[1024];
 
 	ALLEGRO_CONFIG * ini;
-	char name[1024];
-	char type[1024];
-	char comment[1024];
-	char command[1024];
-	char working_directory[1024];
-	char categories[1024];
+	char * field[XLM_LAUNCHER_MAX_FIELDS];
   ALLEGRO_BITMAP * icon;
 
 } XLM_LAUNCHER;
