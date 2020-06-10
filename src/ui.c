@@ -1,4 +1,5 @@
 #include "t3f/t3f.h"
+#include "t3gui/t3gui.h"
 #include "ui.h"
 
 XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
@@ -17,6 +18,24 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 	{
 		goto fail;
 	}
+	uip->box_theme = t3gui_load_theme("data/themes/basic/box_theme.ini", 0);
+	if(!uip->box_theme)
+	{
+		goto fail;
+	}
+	uip->dialog = t3gui_create_dialog();
+	if(!uip->dialog)
+	{
+		goto fail;
+	}
+	t3gui_dialog_add_element(
+		uip->dialog,
+		uip->box_theme,
+		t3gui_box_proc,
+		0, 0, t3f_default_view->width, t3f_default_view->height,
+		0, 0,
+		0, 0, NULL, NULL, NULL
+	);
 	return uip;
 
 	fail:
@@ -30,6 +49,14 @@ void xlm_destroy_ui(XLM_UI * uip)
 {
 	if(uip)
 	{
+		if(uip->dialog)
+		{
+			t3gui_destroy_dialog(uip->dialog);
+		}
+		if(uip->box_theme)
+		{
+			t3gui_destroy_theme(uip->button_theme);
+		}
 		if(uip->button_theme)
 		{
 			t3gui_destroy_theme(uip->button_theme);
@@ -62,23 +89,11 @@ void xlm_process_ui(XLM_UI * uip)
 		}
 		t3f_key[ALLEGRO_KEY_RIGHT] = 0;
 	}
+	t3gui_logic();
 }
 
 void xlm_render_ui(XLM_UI * uip)
 {
-	int pos_x = 0;
-	int pos_y = 0;
-	int i;
-
 	al_clear_to_color(t3f_color_black);
-	al_draw_textf(*uip->button_theme->state[0].font, t3f_color_white, pos_x, pos_y, 0, "Launcher %d/%d", uip->selected_launcher + 1, uip->launcher_database->launcher_count);
-	pos_y += al_get_font_line_height(*uip->button_theme->state[0].font) * 2;
-	if(uip->launcher_database->launcher_count > 0)
-	{
-		for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
-		{
-			al_draw_textf(*uip->button_theme->state[0].font, t3f_color_white, pos_x, pos_y, 0, "%d: %s", i + 1, uip->launcher_database->launcher[uip->selected_launcher]->field[i]);
-			pos_y += al_get_font_line_height(*uip->button_theme->state[0].font);
-		}
-	}
+	t3gui_render();
 }

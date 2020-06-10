@@ -59,6 +59,12 @@ bool app_initialize(APP_INSTANCE * app, int argc, char * argv[])
 		return false;
 	}
 	app->ui = xlm_create_ui(app->launcher_database);
+	if(!app->ui)
+	{
+		printf("Unable to create UI!\n");
+		return false;
+	}
+	t3gui_show_dialog(app->ui->dialog, NULL, 0, app->ui);
 
 	return true;
 }
