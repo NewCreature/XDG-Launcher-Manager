@@ -13,8 +13,6 @@
 #define XLM_LAUNCHER_FIELD_WORKING_DIRECTORY    4
 #define XLM_LAUNCHER_FIELD_CATEGORIES           5
 
-
-
 typedef struct
 {
 
