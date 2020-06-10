@@ -1,12 +1,23 @@
 #include "launcher.h"
 
-static const char * xlm_launcher_key[XLM_LAUNCHER_MAX_FIELDS] =
+static const char * _xlm_launcher_field_key[XLM_LAUNCHER_MAX_FIELDS] =
 {
 	"Name",
 	"GenericName",
 	"Comment",
 	"Exec",
 	"Path",
+	"Categories",
+	NULL
+};
+
+static const char * _xlm_launcher_field_name[XLM_LAUNCHER_MAX_FIELDS] =
+{
+	"Name",
+	"Description",
+	"Comment",
+	"Command",
+	"Working Directory",
 	"Categories",
 	NULL
 };
@@ -85,9 +96,9 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 	}
 	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
 	{
-		if(xlm_launcher_key[i])
+		if(xlm_get_launcher_field_key(i))
 		{
-			val = al_get_config_value(lp->ini, "Desktop Entry", xlm_launcher_key[i]);
+			val = al_get_config_value(lp->ini, "Desktop Entry", xlm_get_launcher_field_key(i));
 			if(val)
 			{
 				if(strlen(val) < XLM_LAUNCHER_MAX_FIELD_SIZE)
@@ -117,13 +128,23 @@ bool xlm_save_launcher(XLM_LAUNCHER * lp, const char * fn)
 
 	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
 	{
-		if(lp->field[i] && xlm_launcher_key[i])
+		if(lp->field[i] && xlm_get_launcher_field_key(i))
 		{
-			al_set_config_value(lp->ini, "Desktop Entry", xlm_launcher_key[i], lp->field[i]);
+			al_set_config_value(lp->ini, "Desktop Entry", xlm_get_launcher_field_key(i), lp->field[i]);
 		}
 	}
 	al_save_config_file(lp->path, lp->ini);
 	return false;
+}
+
+const char * xlm_get_launcher_field_key(int field)
+{
+	return _xlm_launcher_field_key[field];
+}
+
+const char * xlm_get_launcher_field_name(int field)
+{
+	return _xlm_launcher_field_name[field];
 }
 
 bool xlm_set_launcher_field(XLM_LAUNCHER * lp, int i, const char * val)

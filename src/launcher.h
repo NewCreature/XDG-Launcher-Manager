@@ -31,9 +31,9 @@ void xlm_destroy_launcher(XLM_LAUNCHER * lp);
 XLM_LAUNCHER * xlm_load_launcher(const char * fn);
 bool xlm_save_launcher(XLM_LAUNCHER * lp, const char * fn);
 
-bool xlm_set_launcher_name(XLM_LAUNCHER * lp, const char * name);
-bool xlm_set_launcher_command(XLM_LAUNCHER * lp, const char * command);
-bool xlm_set_launcher_working_directory(XLM_LAUNCHER * lp, const char * working_directory);
+const char * xlm_get_launcher_field_key(int field);
+const char * xlm_get_launcher_field_name(int field);
+bool xlm_set_launcher_field(XLM_LAUNCHER * lp, int i, const char * val);
 bool xlm_set_launcher_icon(XLM_LAUNCHER * lp, ALLEGRO_BITMAP * icon);
 
 #endif
