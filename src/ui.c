@@ -69,7 +69,9 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 				usable_width / 2 - XLM_UI_MARGIN,
 				text_height,
 				0, 0,
-				0, 0, uip->launcher_database->launcher[uip->selected_launcher]->field[i], NULL, NULL
+				0, 0,
+				uip->launcher_database->launcher[uip->selected_launcher]->field[i],
+				NULL, NULL
 			);
 			pos_y += text_height + XLM_UI_MARGIN * 2;
 		}
