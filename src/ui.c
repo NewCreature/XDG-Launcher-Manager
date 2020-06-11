@@ -5,6 +5,10 @@
 XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 {
 	XLM_UI * uip;
+	int pos_y = XLM_UI_MARGIN;
+	int text_height;
+	int usable_width;
+	int i;
 
 	uip = malloc(sizeof(XLM_UI));
 	if(!uip)
@@ -23,6 +27,11 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 	{
 		goto fail;
 	}
+	uip->list_box_theme = t3gui_load_theme("data/themes/basic/listbox_theme.ini", 0);
+	if(!uip->list_box_theme)
+	{
+		goto fail;
+	}
 	uip->dialog = t3gui_create_dialog();
 	if(!uip->dialog)
 	{
@@ -36,6 +45,35 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 		0, 0,
 		0, 0, NULL, NULL, NULL
 	);
+	text_height = al_get_font_line_height(*uip->button_theme->state[0].font);
+	usable_width = t3f_default_view->width - XLM_UI_MARGIN * 2;
+	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
+	{
+		if(xlm_get_launcher_field_name(i))
+		{
+			t3gui_dialog_add_element(
+				uip->dialog,
+				uip->button_theme,
+				t3gui_text_proc,
+				XLM_UI_MARGIN, pos_y,
+				usable_width / 2 - XLM_UI_MARGIN / 2,
+				text_height,
+				0, 0,
+				0, 0, (void *)xlm_get_launcher_field_name(i), NULL, NULL
+			);
+			t3gui_dialog_add_element(
+				uip->dialog,
+				uip->list_box_theme,
+				t3gui_edit_proc,
+				usable_width / 2 + XLM_UI_MARGIN * 2, pos_y,
+				usable_width / 2 - XLM_UI_MARGIN,
+				text_height,
+				0, 0,
+				0, 0, uip->launcher_database->launcher[uip->selected_launcher]->field[i], NULL, NULL
+			);
+			pos_y += text_height + XLM_UI_MARGIN * 2;
+		}
+	}
 	return uip;
 
 	fail:

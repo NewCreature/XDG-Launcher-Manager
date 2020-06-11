@@ -1,6 +1,8 @@
 #ifndef XLM_UI_H
 #define XLM_UI_H
 
+#define XLM_UI_MARGIN 8
+
 #include "t3gui/t3gui.h"
 #include "t3gui/theme.h"
 #include "launcher_database.h"
