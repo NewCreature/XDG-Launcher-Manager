@@ -2,9 +2,15 @@
 #include "t3gui/t3gui.h"
 #include "ui.h"
 
+static const char * launcher_list_proc(int index, int *num_elem, void *dp3)
+{
+	return NULL;
+}
+
 XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 {
 	XLM_UI * uip;
+	int pos_x[3];
 	int pos_y = XLM_UI_MARGIN;
 	int text_height;
 	int usable_width;
@@ -46,7 +52,19 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 		0, 0, NULL, NULL, NULL
 	);
 	text_height = al_get_font_line_height(*uip->button_theme->state[0].font);
-	usable_width = t3f_default_view->width - XLM_UI_MARGIN * 2;
+	usable_width = (t3f_default_view->width / 3) * 2 - XLM_UI_MARGIN * 2;
+	pos_x[0] = XLM_UI_MARGIN;
+	pos_x[1] = t3f_default_view->width / 3 + XLM_UI_MARGIN / 2;
+	pos_x[2] = (t3f_default_view->width / 3) * 2 + XLM_UI_MARGIN / 2;
+	t3gui_dialog_add_element(
+		uip->dialog,
+		uip->list_box_theme,
+		t3gui_list_proc,
+		pos_x[0], XLM_UI_MARGIN, t3f_default_view->width / 3 - XLM_UI_MARGIN - XLM_UI_MARGIN / 2,
+		t3f_default_view->height - XLM_UI_MARGIN * 2,
+		0, 0,
+		0, 0, launcher_list_proc, NULL, NULL
+	);
 	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
 	{
 		if(xlm_get_launcher_field_name(i))
@@ -55,7 +73,7 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 				uip->dialog,
 				uip->button_theme,
 				t3gui_text_proc,
-				XLM_UI_MARGIN, pos_y,
+				pos_x[1], pos_y,
 				usable_width / 2 - XLM_UI_MARGIN / 2,
 				text_height,
 				0, 0,
@@ -65,8 +83,8 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 				uip->dialog,
 				uip->list_box_theme,
 				t3gui_edit_proc,
-				usable_width / 2 + XLM_UI_MARGIN * 2, pos_y,
-				usable_width / 2 - XLM_UI_MARGIN,
+				pos_x[2], pos_y,
+				usable_width / 2 - XLM_UI_MARGIN / 2,
 				text_height,
 				0, 0,
 				0, 0,
