@@ -16,6 +16,10 @@ typedef struct
 	T3GUI_THEME * slider_theme;
 
 	T3GUI_DIALOG * dialog;
+	T3GUI_ELEMENT * launcher_list_element;
+	T3GUI_ELEMENT * add_button_element;
+	T3GUI_ELEMENT * delete_button_element;
+	T3GUI_ELEMENT * save_button_element;
 
 	XLM_LAUNCHER_DATABASE * launcher_database;
 	int selected_launcher;
