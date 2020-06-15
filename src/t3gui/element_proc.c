@@ -484,6 +484,15 @@ int t3gui_push_button_proc(int msg, T3GUI_ELEMENT *d, int c)
 
     switch (msg)
     {
+        case MSG_START:
+				{
+					if(d->dp3)
+					{
+						d->user_data = d->dp3;
+						d->dp3 = NULL;
+					}
+					break;
+				}
         case MSG_LOSTMOUSE:
         {
             if(d->flags & D_INTERACT)
