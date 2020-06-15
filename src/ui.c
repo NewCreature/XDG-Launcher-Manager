@@ -22,6 +22,36 @@ static const char * launcher_list_proc(int index, int *num_elem, void *dp3)
 	return NULL;
 }
 
+static int add_button_proc(T3GUI_ELEMENT * d, void *dp3)
+{
+	XLM_LAUNCHER_DATABASE * launcher_database;
+
+	launcher_database = (XLM_LAUNCHER_DATABASE *)dp3;
+	printf("add\n");
+
+	return 0;
+}
+
+static int delete_button_proc(T3GUI_ELEMENT * d, void *dp3)
+{
+	XLM_LAUNCHER_DATABASE * launcher_database;
+
+	launcher_database = (XLM_LAUNCHER_DATABASE *)dp3;
+	printf("delete\n");
+
+	return 0;
+}
+
+static int save_button_proc(T3GUI_ELEMENT * d, void *dp3)
+{
+	XLM_LAUNCHER_DATABASE * launcher_database;
+
+	launcher_database = (XLM_LAUNCHER_DATABASE *)dp3;
+	printf("save\n");
+
+	return 0;
+}
+
 XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 {
 	XLM_UI * uip;
@@ -87,29 +117,29 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 	uip->add_button_element = t3gui_dialog_add_element(
 		uip->dialog,
 		uip->button_theme,
-		t3gui_button_proc,
+		t3gui_push_button_proc,
 		XLM_UI_MARGIN, t3f_default_view->height - XLM_UI_MARGIN - button_height,
 		button_height, button_height,
 		0, 0,
-		0, 0, "+", NULL, NULL
+		0, 0, "+", add_button_proc, uip->launcher_database
 	);
 	uip->delete_button_element = t3gui_dialog_add_element(
 		uip->dialog,
 		uip->button_theme,
-		t3gui_button_proc,
+		t3gui_push_button_proc,
 		XLM_UI_MARGIN + button_height, t3f_default_view->height - XLM_UI_MARGIN - button_height,
 		button_height, button_height,
 		0, 0,
-		0, 0, "-", NULL, NULL
+		0, 0, "-", delete_button_proc, uip->launcher_database
 	);
 	uip->save_button_element = t3gui_dialog_add_element(
 		uip->dialog,
 		uip->button_theme,
-		t3gui_button_proc,
+		t3gui_push_button_proc,
 		t3f_default_view->width - XLM_UI_MARGIN - button_width, t3f_default_view->height - XLM_UI_MARGIN - button_height,
 		button_width, button_height,
 		0, 0,
-		0, 0, "Save", NULL, NULL
+		0, 0, "Save", save_button_proc, uip->launcher_database
 	);
 	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
 	{
