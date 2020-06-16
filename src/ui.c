@@ -24,10 +24,10 @@ static const char * launcher_list_proc(int index, int *num_elem, void *dp3)
 
 static int add_button_proc(T3GUI_ELEMENT * d, void *dp3)
 {
-	XLM_LAUNCHER_DATABASE * launcher_database;
+	XLM_UI * uip;
 
-	launcher_database = (XLM_LAUNCHER_DATABASE *)dp3;
-	xlm_add_launcher_to_database(launcher_database);
+	uip = (XLM_UI *)dp3;
+	xlm_add_launcher_to_database(uip->launcher_database);
 	printf("add\n");
 
 	return 0;
@@ -35,21 +35,20 @@ static int add_button_proc(T3GUI_ELEMENT * d, void *dp3)
 
 static int delete_button_proc(T3GUI_ELEMENT * d, void *dp3)
 {
-	XLM_LAUNCHER_DATABASE * launcher_database;
-	int i;
+	XLM_UI * uip;
 
-	launcher_database = (XLM_LAUNCHER_DATABASE *)dp3;
-//	xlm_delete_launcher_from_database(launcher_database, )
-	printf("delete\n");
+	uip = (XLM_UI *)dp3;
+	xlm_delete_launcher_from_database(uip->launcher_database, uip->launcher_list_element->d1);
+	printf("delete %d\n", uip->launcher_list_element->d1);
 
 	return 0;
 }
 
 static int save_button_proc(T3GUI_ELEMENT * d, void *dp3)
 {
-	XLM_LAUNCHER_DATABASE * launcher_database;
+	XLM_UI * uip;
 
-	launcher_database = (XLM_LAUNCHER_DATABASE *)dp3;
+	uip = (XLM_UI *)dp3;
 	printf("save\n");
 
 	return 0;
@@ -124,7 +123,7 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 		XLM_UI_MARGIN, t3f_default_view->height - XLM_UI_MARGIN - button_height,
 		button_height, button_height,
 		0, 0,
-		0, 0, "+", add_button_proc, uip->launcher_database
+		0, 0, "+", add_button_proc, uip
 	);
 	uip->delete_button_element = t3gui_dialog_add_element(
 		uip->dialog,
@@ -133,7 +132,7 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 		XLM_UI_MARGIN + button_height, t3f_default_view->height - XLM_UI_MARGIN - button_height,
 		button_height, button_height,
 		0, 0,
-		0, 0, "-", delete_button_proc, uip->launcher_database
+		0, 0, "-", delete_button_proc, uip
 	);
 	uip->save_button_element = t3gui_dialog_add_element(
 		uip->dialog,
@@ -142,7 +141,7 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 		t3f_default_view->width - XLM_UI_MARGIN - button_width, t3f_default_view->height - XLM_UI_MARGIN - button_height,
 		button_width, button_height,
 		0, 0,
-		0, 0, "Save", save_button_proc, uip->launcher_database
+		0, 0, "Save", save_button_proc, uip
 	);
 	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
 	{

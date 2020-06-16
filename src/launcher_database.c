@@ -153,6 +153,7 @@ bool xlm_delete_launcher_from_database(XLM_LAUNCHER_DATABASE * ldp, int i)
 		{
 			ldp->launcher[j] = ldp->launcher[j + 1];
 		}
+		ldp->launcher_count--;
 		return true;
 	}
 	return false;
