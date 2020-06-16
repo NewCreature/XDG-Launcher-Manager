@@ -17,4 +17,7 @@ typedef struct
 XLM_LAUNCHER_DATABASE * xlm_create_launcher_database(const char * path);
 void xlm_destroy_launcher_database(XLM_LAUNCHER_DATABASE * ldp);
 
+XLM_LAUNCHER * xlm_add_launcher_to_database(XLM_LAUNCHER_DATABASE * ldp);
+bool xlm_delete_launcher_from_database(XLM_LAUNCHER_DATABASE * ldp, int i);
+
 #endif

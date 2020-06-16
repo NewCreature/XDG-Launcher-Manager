@@ -27,6 +27,7 @@ static int add_button_proc(T3GUI_ELEMENT * d, void *dp3)
 	XLM_LAUNCHER_DATABASE * launcher_database;
 
 	launcher_database = (XLM_LAUNCHER_DATABASE *)dp3;
+	xlm_add_launcher_to_database(launcher_database);
 	printf("add\n");
 
 	return 0;
@@ -35,8 +36,10 @@ static int add_button_proc(T3GUI_ELEMENT * d, void *dp3)
 static int delete_button_proc(T3GUI_ELEMENT * d, void *dp3)
 {
 	XLM_LAUNCHER_DATABASE * launcher_database;
+	int i;
 
 	launcher_database = (XLM_LAUNCHER_DATABASE *)dp3;
+//	xlm_delete_launcher_from_database(launcher_database, )
 	printf("delete\n");
 
 	return 0;
