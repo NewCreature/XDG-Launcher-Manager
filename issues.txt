@@ -5,14 +5,21 @@ XDG Launcher Manager Issues
 
 [ ]Implement UI.
 
-   [ ]Need a list box to list all of the launchers in the database.
+   [X]Need a list box to list all of the launchers in the database.
 
    [ ]Need an image button to show the current icon. This button should be
       clickable so we can select a new icon if we want.
 
-   [ ]Need a way to add and delete launchers.
+   [X]Need a way to add and delete launchers.
 
-   [ ]Need a button to save.
+   [X]Need a button to save.
+
+	 [ ]Update edit box pointers when changing selected launcher.
+
+	 [ ]Look into why edit boxes aren't accepting typed characters.
+
+   [ ]Allow name field to remain empty. launcher_list_proc() can return
+      "Unnamed" if the string is empty.
 
 [ ]Implement saving.
 
