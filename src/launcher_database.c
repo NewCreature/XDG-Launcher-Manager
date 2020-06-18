@@ -92,6 +92,10 @@ void xlm_destroy_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
 		{
 			xlm_destroy_launcher(ldp->launcher[i]);
 		}
+		for(i = 0; i < ldp->saved_launcher_count; i++)
+		{
+			xlm_destroy_launcher(ldp->saved_launcher[i]);
+		}
 		free(ldp);
 	}
 }
