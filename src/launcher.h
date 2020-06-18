@@ -22,6 +22,7 @@ typedef struct
 	ALLEGRO_CONFIG * ini;
 	char * field[XLM_LAUNCHER_MAX_FIELDS];
   ALLEGRO_BITMAP * icon;
+	bool hidden;
 
 } XLM_LAUNCHER;
 
