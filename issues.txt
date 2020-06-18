@@ -16,6 +16,8 @@ XDG Launcher Manager Issues
 
 	 [ ]Update edit box pointers when changing selected launcher.
 
+	    [ ]Figure out why the edit boxes always refer to the first launcher.
+
 	 [ ]Look into why edit boxes aren't accepting typed characters.
 
    [ ]Allow name field to remain empty. launcher_list_proc() can return
