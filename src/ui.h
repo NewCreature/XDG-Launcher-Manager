@@ -20,6 +20,7 @@ typedef struct
 	T3GUI_ELEMENT * add_button_element;
 	T3GUI_ELEMENT * delete_button_element;
 	T3GUI_ELEMENT * save_button_element;
+	T3GUI_ELEMENT * edit_field_element[XLM_LAUNCHER_MAX_FIELDS];
 
 	XLM_LAUNCHER_DATABASE * launcher_database;
 	int selected_launcher;

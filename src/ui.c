@@ -157,7 +157,7 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 				0, 0,
 				0, 0, (void *)xlm_get_launcher_field_name(i), NULL, NULL
 			);
-			t3gui_dialog_add_element(
+			uip->edit_field_element[i] = t3gui_dialog_add_element(
 				uip->dialog,
 				uip->list_box_theme,
 				t3gui_edit_proc,
@@ -201,31 +201,38 @@ void xlm_destroy_ui(XLM_UI * uip)
 	}
 }
 
-void xlm_process_ui(XLM_UI * uip)
+static void update_edit_fields(XLM_UI * uip)
 {
-	if(t3f_key[ALLEGRO_KEY_LEFT])
+	int i;
+
+	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
 	{
-		uip->selected_launcher--;
-		if(uip->selected_launcher < 0)
+		if(uip->edit_field_element[i])
 		{
-			uip->selected_launcher = uip->launcher_database->launcher_count - 1;
-			if(uip->selected_launcher < 0)
+			if(uip->selected_launcher < uip->launcher_database->launcher_count)
 			{
-				uip->selected_launcher = 0;
+				uip->edit_field_element[i]->dp = uip->launcher_database->launcher[uip->selected_launcher]->field[i];
+			}
+			else
+			{
+				uip->edit_field_element[i]->dp = NULL;
 			}
 		}
-		t3f_key[ALLEGRO_KEY_LEFT] = 0;
 	}
-	if(t3f_key[ALLEGRO_KEY_RIGHT])
-	{
-		uip->selected_launcher++;
-		if(uip->selected_launcher >= uip->launcher_database->launcher_count)
-		{
-			uip->selected_launcher = 0;
-		}
-		t3f_key[ALLEGRO_KEY_RIGHT] = 0;
-	}
+}
+
+void xlm_process_ui(XLM_UI * uip)
+{
+	int current_launcher;
+	int launcher_count;
+
+	current_launcher = uip->launcher_list_element->d1;
+	launcher_count = uip->launcher_database->launcher_count;
 	t3gui_logic();
+	if(uip->launcher_list_element->d1 != current_launcher || uip->launcher_database->launcher_count != launcher_count)
+	{
+		update_edit_fields(uip);
+	}
 }
 
 void xlm_render_ui(XLM_UI * uip)
