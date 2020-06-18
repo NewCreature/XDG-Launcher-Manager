@@ -9,6 +9,10 @@ typedef struct
 {
 
 	char folder[1024];
+
+	XLM_LAUNCHER * saved_launcher[XLM_LAUNCHER_DATABASE_MAX];
+	int saved_launcher_count;
+
 	XLM_LAUNCHER * launcher[XLM_LAUNCHER_DATABASE_MAX];
 	int launcher_count;
 

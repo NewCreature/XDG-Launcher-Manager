@@ -20,6 +20,7 @@ static bool process_file(const char * fn, bool isfolder, void * data)
 {
 	XLM_LAUNCHER_DATABASE * dbp = (XLM_LAUNCHER_DATABASE *)data;
 	const char * extension;
+	bool ret = true;
 
 	if(!isfolder)
 	{
@@ -31,12 +32,32 @@ static bool process_file(const char * fn, bool isfolder, void * data)
 			if(dbp->launcher[dbp->launcher_count])
 			{
 				dbp->launcher_count++;
-				return true;
+			}
+			else
+			{
+				ret = false;
+			}
+			dbp->saved_launcher[dbp->launcher_count] = xlm_load_launcher(fn);
+			if(dbp->saved_launcher[dbp->saved_launcher_count])
+			{
+				dbp->saved_launcher_count++;
+			}
+			else
+			{
+				ret = false;
 			}
 		}
+		else
+		{
+			ret = false;
+		}
+	}
+	else
+	{
+		ret = false;
 	}
 
-	return false;
+	return ret;
 }
 
 XLM_LAUNCHER_DATABASE * xlm_create_launcher_database(const char * home_path)
