@@ -122,7 +122,7 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 	}
 }
 
-bool xlm_save_launcher(XLM_LAUNCHER * lp, const char * fn)
+bool xlm_save_launcher(XLM_LAUNCHER * lp)
 {
 	int i;
 

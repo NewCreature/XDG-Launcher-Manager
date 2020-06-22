@@ -30,7 +30,7 @@ XLM_LAUNCHER * xlm_create_launcher(void);
 void xlm_destroy_launcher(XLM_LAUNCHER * lp);
 
 XLM_LAUNCHER * xlm_load_launcher(const char * fn);
-bool xlm_save_launcher(XLM_LAUNCHER * lp, const char * fn);
+bool xlm_save_launcher(XLM_LAUNCHER * lp);
 
 const char * xlm_get_launcher_field_key(int field);
 const char * xlm_get_launcher_field_name(int field);
