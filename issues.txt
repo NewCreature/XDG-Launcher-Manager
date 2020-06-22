@@ -29,3 +29,6 @@ XDG Launcher Manager Issues
       new launcher, we'll want to scan for the first available filename.
 
    [ ]I think we'll want to require the user to initiate a save.
+
+   [ ]Figure out a way to update the saved launcher list without destroying and
+	    reloading the whole launcher database.
