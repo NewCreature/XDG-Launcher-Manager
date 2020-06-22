@@ -23,5 +23,6 @@ void xlm_destroy_launcher_database(XLM_LAUNCHER_DATABASE * ldp);
 
 XLM_LAUNCHER * xlm_add_launcher_to_database(XLM_LAUNCHER_DATABASE * ldp);
 bool xlm_delete_launcher_from_database(XLM_LAUNCHER_DATABASE * ldp, int i);
+bool xlm_save_launcher_database(XLM_LAUNCHER_DATABASE * ldp);
 
 #endif

@@ -183,3 +183,18 @@ bool xlm_delete_launcher_from_database(XLM_LAUNCHER_DATABASE * ldp, int i)
 	}
 	return false;
 }
+
+bool xlm_save_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
+{
+	bool ret = true;
+	int i;
+
+	for(i = 0; i < ldp->launcher_count; i++)
+	{
+		if(!xlm_save_launcher(ldp->launcher[i])
+		{
+			ret = false;
+		}
+	}
+	return ret;
+}
