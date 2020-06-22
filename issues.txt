@@ -14,11 +14,11 @@ XDG Launcher Manager Issues
 
    [X]Need a button to save.
 
-	 [ ]Update edit box pointers when changing selected launcher.
+	 [X]Update edit box pointers when changing selected launcher.
 
-	    [ ]Figure out why the edit boxes always refer to the first launcher.
+	    [X]Figure out why the edit boxes always refer to the first launcher.
 
-	 [ ]Look into why edit boxes aren't accepting typed characters.
+	 [X]Look into why edit boxes aren't accepting typed characters.
 
    [ ]Allow name field to remain empty. launcher_list_proc() can return
       "Unnamed" if the string is empty.
