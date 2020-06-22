@@ -2,6 +2,8 @@
 #include "t3gui/t3gui.h"
 #include "ui.h"
 
+static const char * unnamed_text = "Unnamed";
+
 static const char * launcher_list_proc(int index, int *num_elem, void *dp3)
 {
 	XLM_LAUNCHER_DATABASE * launcher_database;
@@ -16,7 +18,14 @@ static const char * launcher_list_proc(int index, int *num_elem, void *dp3)
 		}
 		default:
 		{
-			return launcher_database->launcher[index]->field[XLM_LAUNCHER_FIELD_NAME];
+			if(strlen(launcher_database->launcher[index]->field[XLM_LAUNCHER_FIELD_NAME]) > 0)
+			{
+				return launcher_database->launcher[index]->field[XLM_LAUNCHER_FIELD_NAME];
+			}
+			else
+			{
+				return unnamed_text;
+			}
 		}
 	}
 	return NULL;
