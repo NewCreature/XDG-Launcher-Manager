@@ -165,7 +165,7 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 				usable_width / 2 - XLM_UI_MARGIN / 2,
 				text_height,
 				0, 0,
-				0, 0,
+				XLM_LAUNCHER_MAX_FIELD_SIZE, 0,
 				uip->launcher_database->launcher[uip->selected_launcher]->field[i],
 				NULL, NULL
 			);
