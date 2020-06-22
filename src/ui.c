@@ -229,6 +229,7 @@ void xlm_process_ui(XLM_UI * uip)
 	current_launcher = uip->launcher_list_element->d1;
 	launcher_count = uip->launcher_database->launcher_count;
 	t3gui_logic();
+	uip->selected_launcher = uip->launcher_list_element->d1;
 	if(uip->launcher_list_element->d1 != current_launcher || uip->launcher_database->launcher_count != launcher_count)
 	{
 		update_edit_fields(uip);
