@@ -191,7 +191,7 @@ bool xlm_save_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
 
 	for(i = 0; i < ldp->launcher_count; i++)
 	{
-		if(!xlm_save_launcher(ldp->launcher[i])
+		if(!xlm_save_launcher(ldp->launcher[i]))
 		{
 			ret = false;
 		}
