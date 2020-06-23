@@ -134,7 +134,7 @@ bool xlm_save_launcher(XLM_LAUNCHER * lp)
 		}
 	}
 	al_save_config_file(lp->path, lp->ini);
-	return false;
+	return true;
 }
 
 const char * xlm_get_launcher_field_key(int field)

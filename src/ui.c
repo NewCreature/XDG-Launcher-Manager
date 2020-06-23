@@ -4,6 +4,26 @@
 
 static const char * unnamed_text = "Unnamed";
 
+static void update_edit_fields(XLM_UI * uip)
+{
+	int i;
+
+	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
+	{
+		if(uip->edit_field_element[i])
+		{
+			if(uip->selected_launcher < uip->launcher_database->launcher_count)
+			{
+				uip->edit_field_element[i]->dp = uip->launcher_database->launcher[uip->selected_launcher]->field[i];
+			}
+			else
+			{
+				uip->edit_field_element[i]->dp = NULL;
+			}
+		}
+	}
+}
+
 static const char * launcher_list_proc(int index, int *num_elem, void *dp3)
 {
 	XLM_LAUNCHER_DATABASE * launcher_database;
@@ -37,6 +57,7 @@ static int add_button_proc(T3GUI_ELEMENT * d, void *dp3)
 
 	uip = (XLM_UI *)dp3;
 	xlm_add_launcher_to_database(uip->launcher_database);
+	update_edit_fields(uip);
 
 	return 0;
 }
@@ -47,6 +68,7 @@ static int delete_button_proc(T3GUI_ELEMENT * d, void *dp3)
 
 	uip = (XLM_UI *)dp3;
 	xlm_delete_launcher_from_database(uip->launcher_database, uip->launcher_list_element->d1);
+	update_edit_fields(uip);
 
 	return 0;
 }
@@ -56,6 +78,11 @@ static int save_button_proc(T3GUI_ELEMENT * d, void *dp3)
 	XLM_UI * uip;
 
 	uip = (XLM_UI *)dp3;
+	if(!xlm_save_launcher_database(uip->launcher_database))
+	{
+		printf("Failed to save launcher database!\n");
+	}
+	update_edit_fields(uip);
 
 	return 0;
 }
@@ -204,26 +231,6 @@ void xlm_destroy_ui(XLM_UI * uip)
 			t3gui_destroy_theme(uip->button_theme);
 		}
 		free(uip);
-	}
-}
-
-static void update_edit_fields(XLM_UI * uip)
-{
-	int i;
-
-	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
-	{
-		if(uip->edit_field_element[i])
-		{
-			if(uip->selected_launcher < uip->launcher_database->launcher_count)
-			{
-				uip->edit_field_element[i]->dp = uip->launcher_database->launcher[uip->selected_launcher]->field[i];
-			}
-			else
-			{
-				uip->edit_field_element[i]->dp = NULL;
-			}
-		}
 	}
 }
 

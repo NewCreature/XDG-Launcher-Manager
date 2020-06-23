@@ -60,6 +60,12 @@ static bool process_file(const char * fn, bool isfolder, void * data)
 	return ret;
 }
 
+static bool _build_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
+{
+	t3f_scan_files(ldp->folder, process_file, false, ldp);
+	return true;
+}
+
 XLM_LAUNCHER_DATABASE * xlm_create_launcher_database(const char * home_path)
 {
 	XLM_LAUNCHER_DATABASE * launcher_database;
@@ -71,8 +77,10 @@ XLM_LAUNCHER_DATABASE * xlm_create_launcher_database(const char * home_path)
 	}
 	memset(launcher_database, 0, sizeof(XLM_LAUNCHER_DATABASE));
 	sprintf(launcher_database->folder, "%s/.local/share/applications/", home_path);
-	t3f_scan_files(launcher_database->folder, process_file, false, launcher_database);
-
+	if(!_build_launcher_database(launcher_database))
+	{
+		goto fail;
+	}
 	return launcher_database;
 
 	fail:
@@ -82,20 +90,27 @@ XLM_LAUNCHER_DATABASE * xlm_create_launcher_database(const char * home_path)
 	}
 }
 
-void xlm_destroy_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
+static void _clear_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
 {
 	int i;
 
+	for(i = 0; i < ldp->launcher_count; i++)
+	{
+		xlm_destroy_launcher(ldp->launcher[i]);
+		ldp->launcher_count = 0;
+	}
+	for(i = 0; i < ldp->saved_launcher_count; i++)
+	{
+		xlm_destroy_launcher(ldp->saved_launcher[i]);
+		ldp->saved_launcher_count = 0;
+	}
+}
+
+void xlm_destroy_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
+{
 	if(ldp)
 	{
-		for(i = 0; i < ldp->launcher_count; i++)
-		{
-			xlm_destroy_launcher(ldp->launcher[i]);
-		}
-		for(i = 0; i < ldp->saved_launcher_count; i++)
-		{
-			xlm_destroy_launcher(ldp->saved_launcher[i]);
-		}
+		_clear_launcher_database(ldp);
 		free(ldp);
 	}
 }
@@ -150,6 +165,11 @@ XLM_LAUNCHER * xlm_add_launcher_to_database(XLM_LAUNCHER_DATABASE * ldp)
 		lp = xlm_create_launcher();
 		if(lp)
 		{
+			lp->ini = al_create_config();
+			if(!lp->ini)
+			{
+				goto fail;
+			}
 			next_path = get_next_path(ldp);
 			if(next_path)
 			{
@@ -160,11 +180,17 @@ XLM_LAUNCHER * xlm_add_launcher_to_database(XLM_LAUNCHER_DATABASE * ldp)
 			}
 			else
 			{
-				xlm_destroy_launcher(lp);
+				goto fail;
 			}
 		}
 	}
 	return lp;
+
+	fail:
+	{
+		xlm_destroy_launcher(lp);
+	}
+	return NULL;
 }
 
 bool xlm_delete_launcher_from_database(XLM_LAUNCHER_DATABASE * ldp, int i)
@@ -193,8 +219,15 @@ bool xlm_save_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
 	{
 		if(!xlm_save_launcher(ldp->launcher[i]))
 		{
+			printf("failed to save launcher %d\n", i);
 			ret = false;
 		}
+	}
+	_clear_launcher_database(ldp);
+	if(!_build_launcher_database(ldp))
+	{
+		ret = false;
+		printf("Could not rebuild launcher database!\n");
 	}
 	return ret;
 }
