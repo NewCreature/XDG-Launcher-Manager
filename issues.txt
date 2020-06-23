@@ -25,10 +25,9 @@ XDG Launcher Manager Issues
 
 [ ]Implement saving.
 
-   [ ]XLM-created launchers will have a specific filename format. When adding a
+   [X]XLM-created launchers will have a specific filename format. When adding a
       new launcher, we'll want to scan for the first available filename.
 
-   [ ]I think we'll want to require the user to initiate a save.
+   [X]I think we'll want to require the user to initiate a save.
 
-   [ ]Figure out a way to update the saved launcher list without destroying and
-	    reloading the whole launcher database.
+   [ ]Implement deleting launchers from storage.
