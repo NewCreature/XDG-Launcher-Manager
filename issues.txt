@@ -3,6 +3,12 @@ XDG Launcher Manager Issues
 
 [X]Build launcher database from .desktop files in the applications folder.
 
+[ ]Look into why Type is not set to Application for new launchers.
+
+[ ]Don't set launcher config values for empty fields.
+
+[ ]Look into system call to update menus.
+
 [ ]Implement UI.
 
    [X]Need a list box to list all of the launchers in the database.
