@@ -159,6 +159,7 @@ XLM_LAUNCHER * xlm_add_launcher_to_database(XLM_LAUNCHER_DATABASE * ldp)
 {
 	XLM_LAUNCHER * lp = NULL;
 	const char * next_path;
+	int i;
 
 	if(ldp->launcher_count < XLM_LAUNCHER_DATABASE_MAX)
 	{
@@ -174,7 +175,11 @@ XLM_LAUNCHER * xlm_add_launcher_to_database(XLM_LAUNCHER_DATABASE * ldp)
 			if(next_path)
 			{
 				strcpy(lp->path, next_path);
-				strcpy(lp->field[XLM_LAUNCHER_FIELD_NAME], "Unnamed");
+				i = xlm_get_launcher_field_by_name("Type");
+				if(i >= 0)
+				{
+					xlm_set_launcher_field(lp, i, "Application");
+				}
 				ldp->launcher[ldp->launcher_count] = lp;
 				ldp->launcher_count++;
 			}

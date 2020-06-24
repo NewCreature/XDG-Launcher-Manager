@@ -34,6 +34,7 @@ bool xlm_save_launcher(XLM_LAUNCHER * lp);
 
 const char * xlm_get_launcher_field_key(int field);
 const char * xlm_get_launcher_field_name(int field);
+int xlm_get_launcher_field_by_name(const char * name);
 bool xlm_set_launcher_field(XLM_LAUNCHER * lp, int i, const char * val);
 bool xlm_set_launcher_icon(XLM_LAUNCHER * lp, ALLEGRO_BITMAP * icon);
 

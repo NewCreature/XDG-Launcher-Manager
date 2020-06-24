@@ -8,6 +8,7 @@ static const char * _xlm_launcher_field_key[XLM_LAUNCHER_MAX_FIELDS] =
 	"Exec",
 	"Path",
 	"Categories",
+	"Type",
 	NULL
 };
 
@@ -19,6 +20,7 @@ static const char * _xlm_launcher_field_name[XLM_LAUNCHER_MAX_FIELDS] =
 	"Command",
 	"Working Directory",
 	"Categories",
+	NULL,
 	NULL
 };
 
@@ -145,6 +147,23 @@ const char * xlm_get_launcher_field_key(int field)
 const char * xlm_get_launcher_field_name(int field)
 {
 	return _xlm_launcher_field_name[field];
+}
+
+int xlm_get_launcher_field_by_name(const char * name)
+{
+	int i;
+
+	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
+	{
+		if(_xlm_launcher_field_name[i])
+		{
+			if(!strcmp(name, _xlm_launcher_field_name[i]))
+			{
+				return i;
+			}
+		}
+	}
+	return -1;
 }
 
 bool xlm_set_launcher_field(XLM_LAUNCHER * lp, int i, const char * val)
