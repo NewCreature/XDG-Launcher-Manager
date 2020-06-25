@@ -29,11 +29,11 @@ XDG Launcher Manager Issues
    [X]Allow name field to remain empty. launcher_list_proc() can return
       "Unnamed" if the string is empty.
 
-[ ]Implement saving.
+[X]Implement saving.
 
    [X]XLM-created launchers will have a specific filename format. When adding a
       new launcher, we'll want to scan for the first available filename.
 
    [X]I think we'll want to require the user to initiate a save.
 
-   [ ]Implement deleting launchers from storage.
+   [X]Implement deleting launchers from storage.
