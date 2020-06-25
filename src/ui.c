@@ -87,6 +87,8 @@ static int save_button_proc(T3GUI_ELEMENT * d, void *dp3)
 	return 0;
 }
 
+static char null_field[XLM_LAUNCHER_MAX_FIELD_SIZE] = {0};
+
 XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 {
 	XLM_UI * uip;
@@ -96,6 +98,8 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 	int usable_width;
 	int button_width;
 	int button_height;
+	char * field;
+	int field_size;
 	int i;
 
 	uip = malloc(sizeof(XLM_UI));
@@ -190,6 +194,16 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 				0, 0,
 				0, 0, (void *)xlm_get_launcher_field_name(i), NULL, NULL
 			);
+			if(uip->selected_launcher < uip->launcher_database->launcher_count)
+			{
+				field = uip->launcher_database->launcher[uip->selected_launcher]->field[i];
+				field_size = XLM_LAUNCHER_MAX_FIELD_SIZE;
+			}
+			else
+			{
+				field = null_field;
+				field_size = 0;
+			}
 			uip->edit_field_element[i] = t3gui_dialog_add_element(
 				uip->dialog,
 				uip->list_box_theme,
@@ -198,8 +212,8 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 				usable_width / 2 - XLM_UI_MARGIN / 2,
 				text_height,
 				0, 0,
-				XLM_LAUNCHER_MAX_FIELD_SIZE, 0,
-				uip->launcher_database->launcher[uip->selected_launcher]->field[i],
+				field_size, 0,
+				field,
 				NULL, NULL
 			);
 			pos_y += text_height + XLM_UI_MARGIN * 2;
