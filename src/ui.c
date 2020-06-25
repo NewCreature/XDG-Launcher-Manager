@@ -15,10 +15,12 @@ static void update_edit_fields(XLM_UI * uip)
 			if(uip->selected_launcher < uip->launcher_database->launcher_count)
 			{
 				uip->edit_field_element[i]->dp = uip->launcher_database->launcher[uip->selected_launcher]->field[i];
+				uip->edit_field_element[i]->d1 = XLM_LAUNCHER_MAX_FIELD_SIZE;
 			}
 			else
 			{
 				uip->edit_field_element[i]->dp = NULL;
+				uip->edit_field_element[i]->d1 = 0;
 			}
 		}
 	}
