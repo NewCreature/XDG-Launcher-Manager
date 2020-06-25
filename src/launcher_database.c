@@ -37,7 +37,7 @@ static bool process_file(const char * fn, bool isfolder, void * data)
 			{
 				ret = false;
 			}
-			dbp->saved_launcher[dbp->launcher_count] = xlm_load_launcher(fn);
+			dbp->saved_launcher[dbp->saved_launcher_count] = xlm_load_launcher(fn);
 			if(dbp->saved_launcher[dbp->saved_launcher_count])
 			{
 				dbp->saved_launcher_count++;
@@ -215,6 +215,39 @@ bool xlm_delete_launcher_from_database(XLM_LAUNCHER_DATABASE * ldp, int i)
 	return false;
 }
 
+static bool should_delete_launcher(XLM_LAUNCHER_DATABASE * ldp, int i)
+{
+	int j;
+
+	for(j = 0; j < ldp->launcher_count; j++)
+	{
+		printf(" c %s\n", ldp->launcher[j]->path);
+		if(!strcmp(ldp->launcher[j]->path, ldp->saved_launcher[i]->path))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+static void remove_launcher(XLM_LAUNCHER * lp)
+{
+	al_remove_filename(lp->path);
+}
+
+static void remove_deleted_launchers(XLM_LAUNCHER_DATABASE * ldp)
+{
+	int i;
+
+	for(i = 0; i < ldp->saved_launcher_count; i++)
+	{
+		if(should_delete_launcher(ldp, i))
+		{
+			remove_launcher(ldp->saved_launcher[i]);
+		}
+	}
+}
+
 bool xlm_save_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
 {
 	bool ret = true;
@@ -228,6 +261,7 @@ bool xlm_save_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
 			ret = false;
 		}
 	}
+	remove_deleted_launchers(ldp);
 	_clear_launcher_database(ldp);
 	if(!_build_launcher_database(ldp))
 	{
