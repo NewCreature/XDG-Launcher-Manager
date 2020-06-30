@@ -149,6 +149,23 @@ const char * xlm_get_launcher_field_name(int field)
 	return _xlm_launcher_field_name[field];
 }
 
+int xlm_get_launcher_field_by_key(const char * name)
+{
+	int i;
+
+	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
+	{
+		if(_xlm_launcher_field_key[i])
+		{
+			if(!strcmp(name, _xlm_launcher_field_key[i]))
+			{
+				return i;
+			}
+		}
+	}
+	return -1;
+}
+
 int xlm_get_launcher_field_by_name(const char * name)
 {
 	int i;

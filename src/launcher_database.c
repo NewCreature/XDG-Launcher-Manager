@@ -175,7 +175,7 @@ XLM_LAUNCHER * xlm_add_launcher_to_database(XLM_LAUNCHER_DATABASE * ldp)
 			if(next_path)
 			{
 				strcpy(lp->path, next_path);
-				i = xlm_get_launcher_field_by_name("Type");
+				i = xlm_get_launcher_field_by_key("Type");
 				if(i >= 0)
 				{
 					xlm_set_launcher_field(lp, i, "Application");
