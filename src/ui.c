@@ -29,6 +29,7 @@ static void update_edit_fields(XLM_UI * uip)
 static const char * launcher_list_proc(int index, int *num_elem, void *dp3)
 {
 	XLM_LAUNCHER_DATABASE * launcher_database;
+	int field;
 
 	launcher_database = (XLM_LAUNCHER_DATABASE *)dp3;
 	switch(index)
@@ -40,14 +41,15 @@ static const char * launcher_list_proc(int index, int *num_elem, void *dp3)
 		}
 		default:
 		{
-			if(strlen(launcher_database->launcher[index]->field[XLM_LAUNCHER_FIELD_NAME]) > 0)
+			field = xlm_get_launcher_field_by_name("Name");
+			if(field >= 0)
 			{
-				return launcher_database->launcher[index]->field[XLM_LAUNCHER_FIELD_NAME];
+				if(strlen(launcher_database->launcher[index]->field[field]) > 0)
+				{
+					return launcher_database->launcher[index]->field[field];
+				}
 			}
-			else
-			{
-				return unnamed_text;
-			}
+			return unnamed_text;
 		}
 	}
 	return NULL;

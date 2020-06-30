@@ -6,13 +6,6 @@
 #define XLM_LAUNCHER_MAX_FIELDS                16
 #define XLM_LAUNCHER_MAX_FIELD_SIZE          1024
 
-#define XLM_LAUNCHER_FIELD_NAME                 0
-#define XLM_LAUNCHER_FIELD_TYPE                 1
-#define XLM_LAUNCHER_FIELD_COMMENT              2
-#define XLM_LAUNCHER_FIELD_COMMAND              3
-#define XLM_LAUNCHER_FIELD_WORKING_DIRECTORY    4
-#define XLM_LAUNCHER_FIELD_CATEGORIES           5
-
 typedef struct
 {
 
