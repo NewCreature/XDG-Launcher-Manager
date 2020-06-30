@@ -5,7 +5,7 @@ XDG Launcher Manager Issues
 
 [X]Look into why Type is not set to Application for new launchers.
 
-[ ]Don't set launcher config values for empty fields.
+[X]Don't set launcher config values for empty fields.
 
 [ ]Look into system call to update menus.
 
