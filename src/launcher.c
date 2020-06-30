@@ -132,7 +132,14 @@ bool xlm_save_launcher(XLM_LAUNCHER * lp)
 	{
 		if(lp->field[i] && xlm_get_launcher_field_key(i))
 		{
-			al_set_config_value(lp->ini, "Desktop Entry", xlm_get_launcher_field_key(i), lp->field[i]);
+			if(strlen(lp->field[i]) > 0)
+			{
+				al_set_config_value(lp->ini, "Desktop Entry", xlm_get_launcher_field_key(i), lp->field[i]);
+			}
+			else
+			{
+				al_remove_config_key(lp->ini, "Desktop Entry", xlm_get_launcher_field_key(i));
+			}
 		}
 	}
 	al_save_config_file(lp->path, lp->ini);
