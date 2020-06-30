@@ -14,6 +14,9 @@ XDG Launcher Manager Issues
 
 [ ]Look into crash when deleting the last launcher.
 
+   [ ]Need to see if it is a good idea to allow text pointers to be NULL in GUI
+	    code.
+
 [ ]Implement UI.
 
    [X]Need a list box to list all of the launchers in the database.
