@@ -3,6 +3,7 @@
 #include "ui.h"
 
 static const char * unnamed_text = "Unnamed";
+static char * _null_text = "";
 
 static void update_edit_fields(XLM_UI * uip)
 {
@@ -19,7 +20,7 @@ static void update_edit_fields(XLM_UI * uip)
 			}
 			else
 			{
-				uip->edit_field_element[i]->dp = NULL;
+				uip->edit_field_element[i]->dp = _null_text;
 				uip->edit_field_element[i]->d1 = 0;
 			}
 		}
