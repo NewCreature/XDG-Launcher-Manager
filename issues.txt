@@ -12,6 +12,8 @@ XDG Launcher Manager Issues
    [X]Apparently not needed as the launchers are now showing up as soon as I
 	    save.
 
+[ ]Look into crash when deleting the last launcher.
+
 [ ]Implement UI.
 
    [X]Need a list box to list all of the launchers in the database.
