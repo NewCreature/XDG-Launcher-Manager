@@ -7,7 +7,10 @@ XDG Launcher Manager Issues
 
 [X]Don't set launcher config values for empty fields.
 
-[ ]Look into system call to update menus.
+[X]Look into system call to update menus.
+
+   [X]Apparently not needed as the launchers are now showing up as soon as I
+	    save.
 
 [ ]Implement UI.
 
