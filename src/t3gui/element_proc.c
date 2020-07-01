@@ -560,6 +560,27 @@ int t3gui_push_button_proc(int msg, T3GUI_ELEMENT *d, int c)
     return ret;
 }
 
+int t3gui_image_button_proc(int msg, T3GUI_ELEMENT *d, int c)
+{
+	ALLEGRO_BITMAP * bp = d->dp;
+	int margin = d->d1;
+	int width = d->w - margin * 2;
+	int height = d->h - margin * 2;
+
+	switch (msg)
+	{
+		case MSG_DRAW:
+		{
+			al_draw_scaled_bitmap(bp, 0, 0, al_get_bitmap_width(bp), al_get_bitmap_height(bp), d->x + margin, d->y + margin, d->w - margin, d->h - margin, 0);
+			break;
+		}
+		default:
+		{
+			return t3gui_push_button_proc(msg, d, c);
+		}
+	}
+}
+
 /* d_clear_proc:
  *  Simple dialog procedure which just clears the screen. Useful as the
  *  first object in a dialog.

@@ -55,6 +55,7 @@ int t3gui_box_proc(int msg, T3GUI_ELEMENT *d, int c);
 int t3gui_button_proc(int msg, T3GUI_ELEMENT *d, int c);
 int t3gui_rounded_button_proc(int msg, T3GUI_ELEMENT *d, int c);
 int t3gui_push_button_proc(int msg, T3GUI_ELEMENT *d, int c);
+int t3gui_image_button_proc(int msg, T3GUI_ELEMENT *d, int c);
 int t3gui_text_button_proc(int msg, T3GUI_ELEMENT *d, int c);
 int t3gui_clear_proc(int msg, T3GUI_ELEMENT *d, int c);
 int t3gui_bitmap_proc(int msg, T3GUI_ELEMENT *d, int c);
