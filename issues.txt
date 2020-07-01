@@ -12,10 +12,15 @@ XDG Launcher Manager Issues
    [X]Apparently not needed as the launchers are now showing up as soon as I
 	    save.
 
-[ ]Look into crash when deleting the last launcher.
+[X]Look into crash when deleting the last launcher.
 
-   [ ]Need to see if it is a good idea to allow text pointers to be NULL in GUI
+   [X]Need to see if it is a good idea to allow text pointers to be NULL in GUI
 	    code.
+
+      [X]We'll use an empty string buffer for now. The GUI system could be
+         updated to allow NULL strings, but the code is already a mess. It
+         should probably be cleaned up before we attempt to add features like
+         this.
 
 [ ]Implement UI.
 
