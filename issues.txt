@@ -29,6 +29,10 @@ XDG Launcher Manager Issues
    [ ]Need an image button to show the current icon. This button should be
       clickable so we can select a new icon if we want.
 
+      [ ]Finish implementing image button. We might consolidate the image button
+			   functionality into the standard button. It already supports images, we
+				 just need to have it support scaling and margins.
+
    [X]Need a way to add and delete launchers.
 
    [X]Need a button to save.
