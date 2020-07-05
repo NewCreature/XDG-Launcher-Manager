@@ -92,6 +92,11 @@ static int save_button_proc(T3GUI_ELEMENT * d, void *dp3)
 	return 0;
 }
 
+static int icon_button_proc(T3GUI_ELEMENT * d, void *dp3)
+{
+	return 0;
+}
+
 static char null_field[XLM_LAUNCHER_MAX_FIELD_SIZE] = {0};
 
 XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
@@ -184,6 +189,16 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 		button_width, button_height,
 		0, 0,
 		0, 0, "Save", save_button_proc, uip
+	);
+
+	uip->icon_button_element = t3gui_dialog_add_element(
+		uip->dialog,
+		uip->button_theme,
+		t3gui_push_button_proc,
+		t3f_default_view->width - XLM_UI_MARGIN - 64, t3f_default_view->height - XLM_UI_MARGIN - button_height - XLM_UI_MARGIN - 64,
+		64, 64,
+		0, 0,
+		8, 0, NULL, icon_button_proc, NULL
 	);
 	for(i = 0; i < XLM_LAUNCHER_MAX_FIELDS; i++)
 	{
