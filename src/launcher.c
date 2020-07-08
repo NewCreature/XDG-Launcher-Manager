@@ -9,6 +9,7 @@ static const char * _xlm_launcher_field_key[XLM_LAUNCHER_MAX_FIELDS] =
 	"Path",
 	"Categories",
 	"Type",
+	"Icon",
 	NULL
 };
 
@@ -82,6 +83,7 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 {
 	XLM_LAUNCHER * lp;
 	const char * val;
+	int icon_field;
 	int i;
 
 	lp = xlm_create_launcher();
@@ -111,6 +113,26 @@ XLM_LAUNCHER * xlm_load_launcher(const char * fn)
 				{
 					goto fail;
 				}
+			}
+		}
+	}
+	icon_field = xlm_get_launcher_field_by_key("Icon");
+	if(icon_field >= 0)
+	{
+		if(strlen(lp->field[icon_field]))
+		{
+			lp->icon = al_load_bitmap(lp->field[icon_field]);
+			if(!lp->icon)
+			{
+				printf("Failed to load icon!\n");
+			}
+		}
+		if(!lp->icon)
+		{
+			lp->icon = al_load_bitmap("data/bitmaps/default_icon.png");
+			if(!lp->icon)
+			{
+				printf("Failed to load default icon!\n");
 			}
 		}
 	}

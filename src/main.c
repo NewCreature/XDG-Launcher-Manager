@@ -65,6 +65,8 @@ bool app_initialize(APP_INSTANCE * app, int argc, char * argv[])
 		return false;
 	}
 	t3gui_show_dialog(app->ui->dialog, NULL, 0, app->ui);
+	app->ui->launcher_list_element->d1 = 0;
+	xlm_refresh_ui(app->ui);
 
 	return true;
 }

@@ -25,6 +25,7 @@ static void update_edit_fields(XLM_UI * uip)
 			}
 		}
 	}
+	uip->icon_button_element->dp3 = uip->launcher_database->launcher[uip->selected_launcher]->icon;
 }
 
 static const char * launcher_list_proc(int index, int *num_elem, void *dp3)
@@ -132,6 +133,12 @@ XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp)
 	uip->list_box_theme = t3gui_load_theme("data/themes/basic/listbox_theme.ini", 0);
 	if(!uip->list_box_theme)
 	{
+		goto fail;
+	}
+	uip->default_icon = al_load_bitmap("data/bitmaps/default_icon.png");
+	if(!uip->default_icon)
+	{
+		printf("Unable to load default icon!\n");
 		goto fail;
 	}
 	uip->dialog = t3gui_create_dialog();
@@ -264,8 +271,17 @@ void xlm_destroy_ui(XLM_UI * uip)
 		{
 			t3gui_destroy_theme(uip->button_theme);
 		}
+		if(uip->default_icon)
+		{
+			al_destroy_bitmap(uip->default_icon);
+		}
 		free(uip);
 	}
+}
+
+void xlm_refresh_ui(XLM_UI * uip)
+{
+	update_edit_fields(uip);
 }
 
 void xlm_process_ui(XLM_UI * uip)
@@ -279,7 +295,7 @@ void xlm_process_ui(XLM_UI * uip)
 	uip->selected_launcher = uip->launcher_list_element->d1;
 	if(uip->launcher_list_element->d1 != current_launcher || uip->launcher_database->launcher_count != launcher_count)
 	{
-		update_edit_fields(uip);
+		xlm_refresh_ui(uip);
 	}
 }
 

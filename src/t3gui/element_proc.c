@@ -315,7 +315,7 @@ int t3gui_button_proc(int msg, T3GUI_ELEMENT *d, int c)
             draw_nine_patch_bitmap(p9, c2, d->x, d->y, w, h);
             if(d->dp3)
             {
-								al_draw_tinted_scaled_bitmap(bp, c1, 0, 0, al_get_bitmap_width(bp), al_get_bitmap_height(bp), d->x + margin, d->y + margin, d->w - margin, d->h - margin, 0);
+								al_draw_tinted_scaled_bitmap(bp, c1, 0, 0, al_get_bitmap_width(bp), al_get_bitmap_height(bp), d->x + margin + g, d->y + margin + g, d->w - margin * 2, d->h - margin * 2, 0);
 //                al_draw_tinted_bitmap(d->dp3, c1, d->x + d->w / 2 - al_get_bitmap_width(d->dp3) / 2 + g, d->y + d->h / 2 - al_get_bitmap_height(d->dp3) / 2 + g, 0);
             }
             else

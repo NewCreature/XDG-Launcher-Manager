@@ -14,6 +14,7 @@ typedef struct
 	T3GUI_THEME * button_theme;
 	T3GUI_THEME * list_box_theme;
 	T3GUI_THEME * slider_theme;
+	ALLEGRO_BITMAP * default_icon;
 
 	T3GUI_DIALOG * dialog;
 	T3GUI_ELEMENT * launcher_list_element;
@@ -31,6 +32,7 @@ typedef struct
 XLM_UI * xlm_create_ui(XLM_LAUNCHER_DATABASE * ldp);
 void xlm_destroy_ui(XLM_UI * uip);
 
+void xlm_refresh_ui(XLM_UI * uip);
 void xlm_process_ui(XLM_UI * uip);
 void xlm_render_ui(XLM_UI * uip);
 
