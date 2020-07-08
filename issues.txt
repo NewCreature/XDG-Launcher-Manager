@@ -26,12 +26,23 @@ XDG Launcher Manager Issues
 
    [X]Need a list box to list all of the launchers in the database.
 
-   [ ]Need an image button to show the current icon. This button should be
+   [X]Need an image button to show the current icon. This button should be
       clickable so we can select a new icon if we want.
 
-      [ ]Finish implementing image button. We might consolidate the image button
+      [X]Finish implementing image button. We might consolidate the image button
 			   functionality into the standard button. It already supports images, we
 				 just need to have it support scaling and margins.
+
+      [ ]Ensure image button works properly. Don't know if the push button style
+         works.
+
+      [ ]Allow user to select icon when clicking the icon button. We should copy
+         the selected icon file to the user data folder and reference it from
+				 there. We want the icon to be available even if the user removes the
+				 file they selected.
+
+      [ ]When saving, we should remove un-referenced icons. We should use a
+         similar system to the launcher file naming system.
 
    [X]Need a way to add and delete launchers.
 
