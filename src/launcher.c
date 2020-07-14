@@ -222,8 +222,37 @@ bool xlm_set_launcher_field(XLM_LAUNCHER * lp, int i, const char * val)
 	return false;
 }
 
-bool xlm_set_launcher_icon(XLM_LAUNCHER * lp, ALLEGRO_BITMAP * icon)
+bool xlm_set_launcher_icon(XLM_LAUNCHER * lp, const char * fn)
 {
-	lp->icon = icon;
+	const char * icon_copy_filename;
+	const char * icon_folder;
+	const char * icon_extension;
+	int icon_field;
+
+	icon_folder = al_path_cstr(t3f_data_path, '/');
+	if(icon_folder)
+	{
+		icon_extension = xlm_get_filename_extension(fn);
+		if(icon_extension)
+		{
+			icon_copy_filename = xlm_get_next_filename(icon_folder, "xlm_icon_", icon_extension);
+			if(icon_copy_filename)
+			{
+				if(xlm_copy_file(fn, icon_copy_filename))
+				{
+					icon_field = xlm_get_launcher_field_by_key("Icon");
+					if(icon_field >= 0)
+					{
+						xlm_set_launcher_field(lp, icon_field, icon_copy_filename);
+						lp->icon = al_load_bitmap(icon_copy_filename);
+						if(!lp->icon)
+						{
+							// load placeholder for icons that can't be loaded
+						}
+					}
+				}
+			}
+		}
+	}
 	return true;
 }

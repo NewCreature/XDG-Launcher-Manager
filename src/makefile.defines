@@ -28,6 +28,7 @@ APP_OBJECTS = t3gui/dialog.o\
               ui.o\
               launcher.o\
               launcher_database.o\
+							file_utilities.o\
               main.o
 APP_PACKAGE_DIR = ../packages
 #APP_LIBS =

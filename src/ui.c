@@ -95,6 +95,29 @@ static int save_button_proc(T3GUI_ELEMENT * d, void *dp3)
 
 static int icon_button_proc(T3GUI_ELEMENT * d, void *dp3)
 {
+	XLM_UI * uip;
+	ALLEGRO_FILECHOOSER * file_chooser;
+	int count;
+	const char * icon_path;
+
+	uip = (XLM_UI *)dp3;
+	file_chooser = al_create_native_file_dialog(NULL, "Choose icon file.", "*.png;*.svg", ALLEGRO_FILECHOOSER_FILE_MUST_EXIST);
+	if(file_chooser)
+	{
+		if(al_show_native_file_dialog(t3f_display, file_chooser))
+		{
+			count = al_get_native_file_dialog_count(file_chooser);
+			if(count > 0)
+			{
+				icon_path = al_get_native_file_dialog_path(file_chooser, 0);
+				if(icon_path)
+				{
+					xlm_set_launcher_icon(uip->launcher_database->launcher[uip->selected_launcher], icon_path);
+				}
+			}
+		}
+		al_destroy_native_file_dialog(file_chooser);
+	}
 	return 0;
 }
 
