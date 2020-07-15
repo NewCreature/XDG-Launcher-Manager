@@ -43,7 +43,7 @@ XDG Launcher Manager Issues
 
          [ ]Add icon to represent SVG icons for now.
 
-				 [ ]Update UI after loading icon so we can immediately see the changes.
+				 [X]Update UI after loading icon so we can immediately see the changes.
 
       [ ]When saving, we should remove un-referenced icons. We should use a
          similar system to the launcher file naming system.
