@@ -248,6 +248,56 @@ static void remove_deleted_launchers(XLM_LAUNCHER_DATABASE * ldp)
 	}
 }
 
+static bool icon_used(XLM_LAUNCHER_DATABASE * ldp, const char * fn)
+{
+	int icon_field;
+	int i;
+
+	icon_field = xlm_get_launcher_field_by_key("Icon");
+	if(icon_field >= 0)
+	{
+		for(i = 0; i < ldp->launcher_count; i++)
+		{
+			if(!strcmp(ldp->launcher[i]->field[icon_field], fn))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+static void remove_unreferenced_icons(XLM_LAUNCHER_DATABASE * ldp)
+{
+	char buf[1024];
+	const char * icon_path;
+	int i;
+
+	icon_path = al_path_cstr(t3f_data_path, '/');
+	if(icon_path)
+	{
+		for(i = 0; i < 10000; i++)
+		{
+			sprintf(buf, "%sxlm_icon_%03d.png", icon_path, i);
+			if(al_filename_exists(buf))
+			{
+				if(!icon_used(ldp, buf))
+				{
+					al_remove_filename(buf);
+				}
+			}
+			sprintf(buf, "%sxlm_icon_%03d.svg", icon_path, i);
+			if(al_filename_exists(buf))
+			{
+				if(!icon_used(ldp, buf))
+				{
+					al_remove_filename(buf);
+				}
+			}
+		}
+	}
+}
+
 bool xlm_save_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
 {
 	bool ret = true;
@@ -262,6 +312,7 @@ bool xlm_save_launcher_database(XLM_LAUNCHER_DATABASE * ldp)
 		}
 	}
 	remove_deleted_launchers(ldp);
+	remove_unreferenced_icons(ldp);
 	_clear_launcher_database(ldp);
 	if(!_build_launcher_database(ldp))
 	{
