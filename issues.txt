@@ -45,7 +45,7 @@ XDG Launcher Manager Issues
 
 				 [X]Update UI after loading icon so we can immediately see the changes.
 
-      [ ]When saving, we should remove un-referenced icons. We should use a
+      [X]When saving, we should remove un-referenced icons. We should use a
          similar system to the launcher file naming system.
 
    [X]Need a way to add and delete launchers.
