@@ -22,7 +22,18 @@ XDG Launcher Manager Issues
          should probably be cleaned up before we attempt to add features like
          this.
 
+[ ]Ensure SVG icons can be used. We already allow selecting them, but they seem
+   to be lost upon reloading XLM.
+
 [ ]Implement UI.
+
+   [ ]Need a check box for Terminal field.
+
+	 [ ]Improve layout for icon button.
+
+      [ ]We might put all the display information (icon button, icon path, and
+         Name edit field) at the top. I think this would give the interface a
+				 cleaner look.
 
    [X]Need a list box to list all of the launchers in the database.
 
