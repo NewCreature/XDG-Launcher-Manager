@@ -112,7 +112,10 @@ static int icon_button_proc(T3GUI_ELEMENT * d, void *dp3)
 				icon_path = al_get_native_file_dialog_path(file_chooser, 0);
 				if(icon_path)
 				{
-					xlm_set_launcher_icon(uip->launcher_database->launcher[uip->selected_launcher], icon_path);
+					if(xlm_set_launcher_icon(uip->launcher_database->launcher[uip->selected_launcher], icon_path))
+					{
+						update_edit_fields(uip);
+					}
 				}
 			}
 		}
