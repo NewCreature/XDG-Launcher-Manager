@@ -25,7 +25,10 @@ static void update_edit_fields(XLM_UI * uip)
 			}
 		}
 	}
-	uip->icon_button_element->dp3 = uip->launcher_database->launcher[uip->selected_launcher]->icon;
+	if(uip->selected_launcher < uip->launcher_database->launcher_count)
+	{
+		uip->icon_button_element->dp3 = uip->launcher_database->launcher[uip->selected_launcher]->icon;
+	}
 }
 
 static const char * launcher_list_proc(int index, int *num_elem, void *dp3)
