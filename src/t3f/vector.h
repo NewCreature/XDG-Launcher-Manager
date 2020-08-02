@@ -9,13 +9,12 @@
 
 #define T3F_VECTOR_OBJECT_MAX_SEGMENTS 256
 #define T3F_VECTOR_FONT_MAX_CHARACTERS 256
-#define T3F_VECTOR_LINE_MAX_THICKNESS   16
 
 typedef struct
 {
 
 	float x, y, z;
-
+	
 } T3F_VECTOR_POINT;
 
 typedef struct
@@ -24,7 +23,7 @@ typedef struct
 	T3F_VECTOR_POINT point[2];
 	ALLEGRO_COLOR color;
 	float thickness;
-
+	
 } T3F_VECTOR_SEGMENT;
 
 typedef struct
@@ -32,29 +31,24 @@ typedef struct
 
 	T3F_VECTOR_SEGMENT * segment[T3F_VECTOR_OBJECT_MAX_SEGMENTS];
 	int segments;
-
+	
 } T3F_VECTOR_OBJECT;
 
 typedef struct
 {
-
+	
 	T3F_VECTOR_OBJECT * object;
 	float width;
-
+	
 } T3F_VECTOR_FONT_CHARACTER;
 
 typedef struct
 {
-
+	
 	T3F_VECTOR_FONT_CHARACTER * character[T3F_VECTOR_FONT_MAX_CHARACTERS];
 	float height;
-
+	
 } T3F_VECTOR_FONT;
-
-bool t3f_init_vector_system(void);
-void t3f_exit_vector_system(void);
-
-void t3f_draw_vector_line(float x1, float y1, float x2, float y2, ALLEGRO_COLOR color, int thickness);
 
 /* vector object creation */
 T3F_VECTOR_OBJECT * t3f_create_vector_object(void);
