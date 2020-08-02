@@ -1,4 +1,5 @@
 #include "launcher.h"
+#include "file_utilities.h"
 
 static const char * _xlm_launcher_field_key[XLM_LAUNCHER_MAX_FIELDS] =
 {
