@@ -2106,239 +2106,310 @@ int t3gui_list_proc(int msg, T3GUI_ELEMENT *d, int c)
  */
 int t3gui_edit_proc(int msg, T3GUI_ELEMENT *d, int c)
 {
-   const ALLEGRO_FONT *font = d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].font[0];
-   ALLEGRO_COLOR fg, tc;
-   int last_was_space, new_pos, i, k;
-   int f, l, p, w, x, b, scroll, h;
-   char buf[16];
-   char *s, *t;
-   assert(d);
+	const ALLEGRO_FONT *font = d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].font[0];
+	ALLEGRO_COLOR fg, tc;
+	int last_was_space, new_pos, i, k;
+	int f, l, p, w, x, b, scroll, h;
+	char buf[16];
+	char *s, *t;
+	int margin = 4;
+	assert(d);
 
-   s = d->dp;
-   l = ustrlen(s);
-   if (d->d2 > l)
-      d->d2 = l;
+	s = d->dp;
+	l = ustrlen(s);
+	if(d->d2 > l)
+	{
+		d->d2 = l;
+	}
 
-   /* calculate maximal number of displayable characters */
-   if (d->d2 == l)  {
-      usetc(buf+usetc(buf, ' '), 0);
-      x = al_get_text_width(font, buf);
-   }
-   else
-      x = 0;
+	/* calculate maximal number of displayable characters */
+	if (d->d2 == l)
+	{
+		usetc(buf+usetc(buf, ' '), 0);
+		x = al_get_text_width(font, buf);
+	}
+	else
+	{
+		x = margin;
+	}
 
-   b = 0;
+	b = 0;
 
-   for (p=d->d2; p>=0; p--) {
-      usetc(buf+usetc(buf, ugetat(s, p)), 0);
-      x += al_get_text_width(font, buf);
-      b++;
-      if (x > d->w)
-         break;
-   }
+	for (p=d->d2; p>=0; p--)
+	{
+		usetc(buf+usetc(buf, ugetat(s, p)), 0);
+		x += al_get_text_width(font, buf);
+		b++;
+		if(x > d->w - margin)
+		{
+			break;
+		}
+	}
 
-   if (x <= d->w) {
-      b = l;
-      scroll = false;
-   }
-   else {
-      b--;
-      scroll = true;
-   }
+	if (x <= d->w - margin)
+	{
+		b = l;
+		scroll = false;
+	}
+	else
+	{
+		b--;
+		scroll = true;
+	}
 
-   switch (msg) {
+	switch(msg)
+	{
+		case MSG_START:
+		{
+			d->d2 = l;
+			break;
+		}
+		case MSG_TIMER:
+		{
+			d->tick++;
+			return D_REDRAW;
+		}
+		case MSG_DRAW:
+		{
+			draw_nine_patch_bitmap(d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].bitmap[0], d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_BG], d->x, d->y, d->w, d->h);
+			h = min(d->h, al_get_font_line_height(font)+3);
+			fg = (d->flags & D_DISABLED) ? d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_MG] : d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_FG];
+			x = margin;
 
-      case MSG_START:
-         d->d2 = l;
-         break;
+			if(scroll)
+			{
+				p = d->d2-b+1;
+				b = d->d2;
+			}
+			else
+			{
+				p = 0;
+			}
 
-      case MSG_TIMER:
-      {
-          d->tick++;
-          return D_REDRAW;
-      }
-      case MSG_DRAW:
-        draw_nine_patch_bitmap(d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].bitmap[0], d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_BG], d->x, d->y, d->w, d->h);
-         h = min(d->h, al_get_font_line_height(font)+3);
-         fg = (d->flags & D_DISABLED) ? d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_MG] : d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_FG];
-         x = 0;
+			for(; p<=b; p++)
+			{
+				f = ugetat(s, p);
+				usetc(buf+usetc(buf, (f) ? f : ' '), 0);
+				w = al_get_text_width(font, buf);
+				if(x + w > d->w - margin)
+				{
+					break;
+				}
+				f = ((p == d->d2) && (d->flags & D_GOTFOCUS));
+				tc = d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_FG];
 
-         if (scroll) {
-            p = d->d2-b+1;
-            b = d->d2;
-         }
-         else
-            p = 0;
+				if(f && d->tick % 2 == 0)
+				{
+					int dx, dy, w, hh;
+					al_get_text_dimensions(font, buf, &dx, &dy, &w, &hh);
+					if(w == 0)
+					{
+						al_get_text_dimensions(font, "x", &dx, &dy, &w, &hh);
+					}
+					al_draw_line(d->x+x+dx+0.5 - 1, d->y+0.5, d->x+x+dx+0.5 - 1, d->y+h-0.5, d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_FG], 1.0);
+				}
+				al_draw_text(font, tc, d->x+x, d->y, 0, buf);
+				x += w;
+			}
+			if(d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].bitmap[1])
+			{
+				draw_nine_patch_bitmap(d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].bitmap[1], d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_BG], d->x, d->y, d->w, d->h);
+			}
+			break;
+		}
+		case MSG_MOUSEDOWN:
+		{
+			x = d->x;
 
-         for (; p<=b; p++) {
-            f = ugetat(s, p);
-            usetc(buf+usetc(buf, (f) ? f : ' '), 0);
-            w = al_get_text_width(font, buf);
-            if (x+4+w > d->w - 4)
-               break;
-            f = ((p == d->d2) && (d->flags & D_GOTFOCUS));
-            tc = d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_FG];
+			if(scroll)
+			{
+				p = d->d2 - b + 1;
+				b = d->d2;
+			}
+			else
+			{
+				p = 0;
+			}
 
-            if (f && d->tick % 2 == 0) {
-               int dx, dy, w, hh;
-               al_get_text_dimensions(font, buf, &dx, &dy, &w, &hh);
-               if (w == 0) al_get_text_dimensions(font, "x", &dx, &dy, &w, &hh);
-               al_draw_line(d->x+x+4+dx+0.5 - 1, d->y+0.5, d->x+x+4+dx+0.5 - 1, d->y+h-0.5, d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_FG], 1.0);
-            }
-            al_draw_text(font, tc, d->x+x+4, d->y+1, 0, buf);
-            x += w;
-         }
-         if(d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].bitmap[1])
-         {
-             draw_nine_patch_bitmap(d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].bitmap[1], d->theme->state[T3GUI_ELEMENT_STATE_NORMAL].color[T3GUI_THEME_COLOR_BG], d->x, d->y, d->w, d->h);
-         }
-         break;
+			for(; p < b; p++)
+			{
+				usetc(buf + usetc(buf, ugetat(s, p)), 0);
+				x += al_get_text_width(font, buf);
+				if(x > d->mousex)
+				{
+					break;
+				}
+			}
+			d->d2 = clamp(0, p, l);
+			d->flags |= D_DIRTY;
+			return D_WANTKEYBOARD;
+		}
 
-      case MSG_MOUSEDOWN:
-         x = d->x;
+		case MSG_WANTFOCUS:
+		{
+			d->d2 = clamp(0, d->d2, l);
+			return D_WANTKEYBOARD;
+		}
+		case MSG_LOSTFOCUS:
+		case MSG_KEY:
+		{
+			return D_WANTKEYBOARD;
+		}
+		case MSG_GOTMOUSE:
+		{
+			al_set_system_mouse_cursor(d->display, ALLEGRO_SYSTEM_MOUSE_CURSOR_EDIT);
+			break;
+		}
+		case MSG_LOSTMOUSE:
+		{
+			al_set_system_mouse_cursor(d->display, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);
+			break;
+		}
 
-         if (scroll) {
-            p = d->d2-b+1;
-            b = d->d2;
-         }
-         else
-            p = 0;
+		case MSG_KEYUP:
+		{
+			if (c == ALLEGRO_KEY_TAB || c == ALLEGRO_KEY_ESCAPE)
+			{
+				d->flags |= D_INTERNAL;
+				return D_O_K;
+			}
 
-         for (; p<b; p++) {
-            usetc(buf+usetc(buf, ugetat(s, p)), 0);
-            x += al_get_text_width(font, buf);
-            if (x > d->mousex)
-               break;
-         }
-         d->d2 = clamp(0, p, l);
-         d->flags |= D_DIRTY;
-         return D_WANTKEYBOARD;
+			d->flags |= D_DIRTY;
+			return D_USED_KEY;
+		}
 
-      case MSG_WANTFOCUS:
-      {
-          d->d2 = clamp(0, d->d2, l);
-          return D_WANTKEYBOARD;
-      }
-      case MSG_LOSTFOCUS:
-      case MSG_KEY:
-      {
-          return D_WANTKEYBOARD;
-      }
-     case MSG_GOTMOUSE:
-     {
-         al_set_system_mouse_cursor(d->display, ALLEGRO_SYSTEM_MOUSE_CURSOR_EDIT);
-         break;
-     }
-     case MSG_LOSTMOUSE:
-     {
-         al_set_system_mouse_cursor(d->display, ALLEGRO_SYSTEM_MOUSE_CURSOR_DEFAULT);
-         break;
-     }
+		case MSG_KEYREPEAT:
+		case MSG_KEYDOWN:
+		{
+			(void)0;
+			d->flags &= ~D_INTERNAL;
+			ALLEGRO_KEYBOARD_STATE state;
+			al_get_keyboard_state(&state);
+			int key_shifts = 0;
+			if(al_key_down(&state, ALLEGRO_KEY_LCTRL) || al_key_down(&state, ALLEGRO_KEY_RCTRL))
+			{
+				key_shifts |= ALLEGRO_KEYMOD_CTRL;
+			}
 
-      case MSG_KEYUP:
-         if (c == ALLEGRO_KEY_TAB || c == ALLEGRO_KEY_ESCAPE) {
-            d->flags |= D_INTERNAL;
-            return D_O_K;
-         }
+			if(c == ALLEGRO_KEY_LEFT)
+			{
+				if(d->d2 > 0)
+				{
+					if(key_shifts & ALLEGRO_KEYMOD_CTRL)
+					{
+						last_was_space = true;
+						new_pos = 0;
+						t = s;
+						for (i = 0; i < d->d2; i++)
+						{
+							k = ugetx(&t);
+							if(uisspace(k))
+							{
+								last_was_space = true;
+							}
+							else if (last_was_space)
+							{
+								last_was_space = false;
+								new_pos = i;
+							}
+						}
+						d->d2 = new_pos;
+					}
+					else
+					{
+						d->d2--;
+					}
+				}
+			}
+			else if(c == ALLEGRO_KEY_RIGHT)
+			{
+				if(d->d2 < l)
+				{
+					if(key_shifts & ALLEGRO_KEYMOD_CTRL)
+					{
+						t = s + uoffset(s, d->d2);
+						for(k = ugetx(&t); uisspace(k); k = ugetx(&t))
+						{
+							d->d2++;
+						}
+						for(; k && !uisspace(k); k = ugetx(&t))
+						{
+							d->d2++;
+						}
+					}
+					else
+					{
+						d->d2++;
+					}
+				}
+			}
+			else if(c == ALLEGRO_KEY_HOME)
+			{
+				d->d2 = 0;
+			}
+			else if(c == ALLEGRO_KEY_END)
+			{
+				d->d2 = l;
+			}
+			else if(c == ALLEGRO_KEY_DELETE)
+			{
+				d->flags |= D_INTERNAL;
+				if(d->d2 < l)
+				{
+					uremove(s, d->d2);
+				}
+			}
+			else if(c == ALLEGRO_KEY_BACKSPACE)
+			{
+				d->flags |= D_INTERNAL;
+				if(d->d2 > 0)
+				{
+					d->d2--;
+					uremove(s, d->d2);
+				}
+			}
+			else if(c == ALLEGRO_KEY_ENTER)
+			{
+				if(d->flags & D_EXIT)
+				{
+					d->flags |= D_DIRTY;
+					return D_CLOSE;
+				}
+				else
+				{
+					return D_O_K;
+				}
+			}
+			else if(c == ALLEGRO_KEY_TAB)
+			{
+				d->flags |= D_INTERNAL;
+				return D_O_K;
+			}
+			else
+			{
+				/* don't process regular keys here: MSG_CHAR will do that */
+				break;
+			}
+			d->flags |= D_DIRTY;
+			return D_USED_KEY;
+		}
 
-         d->flags |= D_DIRTY;
-         return D_USED_KEY;
-
-      case MSG_KEYREPEAT:
-      case MSG_KEYDOWN:
-         (void)0;
-         d->flags &= ~D_INTERNAL;
-         ALLEGRO_KEYBOARD_STATE state;
-         al_get_keyboard_state(&state);
-         int key_shifts = 0;
-         if (al_key_down(&state, ALLEGRO_KEY_LCTRL) || al_key_down(&state, ALLEGRO_KEY_RCTRL))
-            key_shifts |= ALLEGRO_KEYMOD_CTRL;
-
-         if (c == ALLEGRO_KEY_LEFT) {
-            if (d->d2 > 0) {
-               if (key_shifts & ALLEGRO_KEYMOD_CTRL) {
-                  last_was_space = true;
-                  new_pos = 0;
-                  t = s;
-                  for (i = 0; i < d->d2; i++) {
-                     k = ugetx(&t);
-                     if (uisspace(k))
-                        last_was_space = true;
-                     else if (last_was_space) {
-                        last_was_space = false;
-                        new_pos = i;
-                     }
-                  }
-                  d->d2 = new_pos;
-               }
-               else
-                  d->d2--;
-            }
-         }
-         else if (c == ALLEGRO_KEY_RIGHT) {
-            if (d->d2 < l) {
-               if (key_shifts & ALLEGRO_KEYMOD_CTRL) {
-                  t = s + uoffset(s, d->d2);
-                  for (k = ugetx(&t); uisspace(k); k = ugetx(&t))
-                     d->d2++;
-                  for (; k && !uisspace(k); k = ugetx(&t))
-                     d->d2++;
-               }
-               else
-                  d->d2++;
-            }
-         }
-         else if (c == ALLEGRO_KEY_HOME) {
-            d->d2 = 0;
-         }
-         else if (c == ALLEGRO_KEY_END) {
-            d->d2 = l;
-         }
-         else if (c == ALLEGRO_KEY_DELETE) {
-            d->flags |= D_INTERNAL;
-            if (d->d2 < l)
-               uremove(s, d->d2);
-         }
-         else if (c == ALLEGRO_KEY_BACKSPACE) {
-            d->flags |= D_INTERNAL;
-            if (d->d2 > 0) {
-               d->d2--;
-               uremove(s, d->d2);
-            }
-         }
-         else if (c == ALLEGRO_KEY_ENTER) {
-            if (d->flags & D_EXIT) {
-               d->flags |= D_DIRTY;
-               return D_CLOSE;
-            }
-            else
-               return D_O_K;
-         }
-         else if (c == ALLEGRO_KEY_TAB) {
-            d->flags |= D_INTERNAL;
-            return D_O_K;
-         }
-         else {
-            /* don't process regular keys here: MSG_CHAR will do that */
-            break;
-         }
-         d->flags |= D_DIRTY;
-         return D_USED_KEY;
-
-      case MSG_CHAR:
-         if ((c >= ' ') && (uisok(c)) && ~d->flags & D_INTERNAL) {
-            if (l < d->d1) {
-               uinsert(s, d->d2, c);
-               d->d2++;
-
-               d->flags |= D_DIRTY;
-            }
-            return D_USED_CHAR;
-         }
-         break;
-   }
-
-   return D_O_K;
+		case MSG_CHAR:
+		{
+			if((c >= ' ') && (uisok(c)) && ~d->flags & D_INTERNAL)
+			{
+				if(l < d->d1)
+				{
+					uinsert(s, d->d2, c);
+					d->d2++;
+					d->flags |= D_DIRTY;
+				}
+				return D_USED_CHAR;
+			}
+			break;
+		}
+	}
+	return D_O_K;
 }
 
 int t3gui_edit_integer_proc(int msg, T3GUI_ELEMENT *d, int c)
